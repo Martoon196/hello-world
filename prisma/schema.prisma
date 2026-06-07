@@ -1,0 +1,67 @@
+// ProperInvest CRM — data model
+// Local dev uses SQLite. For production, switch `provider` to "postgresql"
+// and point DATABASE_URL at your Postgres instance.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// An investor lead coming in from properinvestuk.co.uk, social, referrals, etc.
+model InvestorLead {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- Contact ---
+  name    String
+  email   String?
+  phone   String?
+  company String?
+
+  // Where the lead originated. e.g. WEBSITE, CHATBOT, SOCIAL, REFERRAL, EVENT, PORTAL
+  source  String  @default("WEBSITE")
+
+  // --- Investor profile (drives scoring) ---
+  fundsAvailable   Float?   // capital they can deploy, in GBP
+  timeframe        String?  // IMMEDIATE | M3 | M6 | M12 | UNKNOWN — how soon they can deploy
+  chargeType       String?  // FIRST | SECOND | EQUITY | FLEXIBLE — security they expect
+  targetReturnPct  Float?   // annual return % they are looking for
+  experience       String?  // NONE | SOME | EXPERIENCED
+  notes            String?
+
+  // --- Pipeline & scoring (computed) ---
+  stage      String  @default("NEW") // see src/lib/stages.ts
+  score      Int     @default(0)     // 0–100
+  scoreBand  String  @default("COLD") // HOT | WARM | COLD
+  ownerName  String? // assigned team member
+
+  // Ordering within a pipeline column (lower = higher up).
+  position   Int     @default(0)
+
+  activities Activity[]
+
+  @@index([stage])
+  @@index([scoreBand])
+}
+
+// A timeline entry on a lead: stage changes, notes, emails sent, AI actions.
+model Activity {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  leadId String
+  lead   InvestorLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  // STAGE_CHANGE | NOTE | EMAIL | SCORE | AI | CREATED
+  type    String
+  summary String
+  detail  String?
+  actor   String   @default("system")
+
+  @@index([leadId])
+}
