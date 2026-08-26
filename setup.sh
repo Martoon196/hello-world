@@ -23,6 +23,8 @@ ask()  { local prompt="$1" var="$2" current
            printf "  %s: " "$prompt"
          fi
          read -r value
+         # Strip invisible control characters (Esc/arrow-key noise) and edge spaces
+         value=$(printf '%s' "$value" | tr -d '[:cntrl:]' | sed 's/^ *//; s/ *$//')
          if [ -n "$value" ]; then
            python3 - "$ENV" "$var" "$value" <<'PY'
 import sys
