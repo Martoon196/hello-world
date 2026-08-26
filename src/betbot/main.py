@@ -90,7 +90,12 @@ async def amain() -> None:
     if s.telegram_api_id and s.telegram_api_hash:
         from betbot.ingestion.telegram_listener import TelegramListener
         listener = TelegramListener(repo, pipeline)
-        await listener.start()
+        try:
+            await listener.start()
+        except Exception as e:
+            # Keep the rest of the app (dashboard, feed, webhook) alive.
+            log.error("Telegram listener disabled: %s", e)
+            await notifier.send(f"⚠️ Telegram listener is OFF: {e}")
     else:
         log.warning("Telegram API credentials missing — Telegram ingestion disabled")
 

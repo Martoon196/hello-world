@@ -36,9 +36,16 @@ class TelegramListener:
         self.client = TelegramClient(s.telegram_session_name, s.telegram_api_id, s.telegram_api_hash)
 
     async def start(self) -> None:
+        # Never prompt interactively (we may be running under systemd): connect,
+        # and if the saved session isn't authorized, fail with a clear message.
+        await self.client.connect()
+        if not await self.client.is_user_authorized():
+            await self.client.disconnect()
+            raise RuntimeError(
+                "Telegram session missing or not authorized. Run: "
+                ".venv/bin/python scripts/telegram_login.py  then restart betbot.")
         self.client.add_event_handler(self._on_message, events.NewMessage())
         self.client.add_event_handler(self._on_edit, events.MessageEdited())
-        await self.client.start()
         log.info("telegram listener started")
 
     async def _on_message(self, event) -> None:

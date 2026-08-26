@@ -89,9 +89,20 @@ ask "Your chat id (the number from @userinfobot)"            TELEGRAM_ADMIN_CHAT
 ask "Anthropic API key (starts sk-ant-)"                     ANTHROPIC_API_KEY
 
 say "6/7 First Telegram login (a code will arrive IN your Telegram app)"
-if [ -f "$DIR/betbot.session" ]; then
+if .venv/bin/python - <<'PY'
+from telethon.sync import TelegramClient
+from betbot.config import secrets
+s = secrets()
+c = TelegramClient(s.telegram_session_name, s.telegram_api_id, s.telegram_api_hash)
+c.connect()
+ok = c.is_user_authorized()
+c.disconnect()
+raise SystemExit(0 if ok else 1)
+PY
+then
   echo "  Already logged in — skipping."
 else
+  rm -f "$DIR"/betbot.session*
   .venv/bin/python scripts/telegram_login.py
 fi
 
