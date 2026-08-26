@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>betbot</title>
+<style>
+  :root { --bg:#fff; --fg:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --win:#0a7d33; --loss:#b91c1c; --card:#f8fafc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0f1115; --fg:#e5e7eb; --muted:#9ca3af; --line:#272b33; --win:#4ade80; --loss:#f87171; --card:#171a21; }
+  }
+  body { background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, sans-serif; margin:0; padding:1.5rem; }
+  h1 { font-size:1.3rem; } h2 { font-size:1.05rem; margin-top:2rem; }
+  .tiles { display:flex; flex-wrap:wrap; gap:1rem; }
+  .tile { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:.8rem 1.2rem; min-width:9rem; }
+  .tile .v { font-size:1.4rem; font-weight:600; } .tile .l { color:var(--muted); font-size:.8rem; }
+  table { border-collapse:collapse; width:100%; font-size:.85rem; }
+  th, td { text-align:left; padding:.4rem .6rem; border-bottom:1px solid var(--line); white-space:nowrap; }
+  .num { text-align:right; } .pos { color:var(--win); } .neg { color:var(--loss); }
+  .badge { display:inline-block; border-radius:999px; padding:.1rem .6rem; font-size:.75rem; border:1px solid var(--line); }
+  .warn { background:#b91c1c; color:#fff; border:none; }
+  .scroll { overflow-x:auto; }
+  svg { max-width:100%; }
+</style>
+</head>
+<body>
+<h1>🐎 betbot
+  {% if kill_on %}<span class="badge warn">KILL SWITCH ON</span>{% endif %}
+  {% if shadow_on %}<span class="badge">shadow / paper mode</span>{% endif %}
+</h1>
+
+<div class="tiles">
+  <div class="tile"><div class="v">{{ bankroll_cents|eur }}</div><div class="l">bankroll</div></div>
+  <div class="tile"><div class="v {{ 'pos' if totals.net_pnl_cents >= 0 else 'neg' }}">{{ totals.net_pnl_cents|eur }}</div><div class="l">net P&amp;L</div></div>
+  <div class="tile"><div class="v">{{ "%.1f"|format(roi) }}%</div><div class="l">ROI on stakes</div></div>
+  <div class="tile"><div class="v">{{ "%.0f"|format(strike_rate) }}%</div><div class="l">strike rate ({{ totals.wins or 0 }}/{{ totals.settled or 0 }})</div></div>
+  <div class="tile"><div class="v">{{ totals.bets or 0 }}</div><div class="l">bets total</div></div>
+</div>
+
+{% if curve|length > 1 %}
+<h2>Bankroll curve</h2>
+{% set values = curve|map(attribute='balance_after_cents')|list %}
+{% set vmin = values|min %}{% set vmax = values|max %}{% set span = (vmax - vmin) if vmax != vmin else 1 %}
+<svg viewBox="0 0 600 120" preserveAspectRatio="none" aria-label="bankroll curve">
+  <polyline fill="none" stroke="currentColor" stroke-width="1.5" points="
+    {%- for row in curve %}{{ (loop.index0 / (curve|length - 1) * 600)|round(1) }},{{ (110 - (row['balance_after_cents'] - vmin) / span * 100)|round(1) }} {% endfor -%}
+  "/>
+</svg>
+{% endif %}
+
+{% if review %}
+<h2>⚠️ Needs review ({{ review|length }})</h2>
+<div class="scroll"><table>
+  <tr><th>bet</th><th>horse</th><th>course</th><th>state</th><th class="num">est. P&amp;L</th></tr>
+  {% for b in review %}
+  <tr><td>#{{ b.id }}</td><td>{{ b.horse_name }}</td><td>{{ b.course }}</td><td>{{ b.state }}</td>
+      <td class="num">{{ b.net_pnl_cents|eur }}</td></tr>
+  {% endfor %}
+</table></div>
+{% endif %}
+
+<h2>Per-tipster (the CRM)</h2>
+<div class="scroll"><table>
+  <tr><th>source</th><th class="num">bets</th><th class="num">settled</th><th class="num">wins</th>
+      <th class="num">strike</th><th class="num">staked</th><th class="num">net P&amp;L</th>
+      <th class="num">ROI</th><th class="num">drift cost</th></tr>
+  {% for s in sources %}
+  <tr>
+    <td>{{ s.display_name }}</td>
+    <td class="num">{{ s.bets or 0 }}</td>
+    <td class="num">{{ s.settled or 0 }}</td>
+    <td class="num">{{ s.wins or 0 }}</td>
+    <td class="num">{{ "%.0f"|format((s.wins or 0) / s.settled * 100) if s.settled else '—' }}%</td>
+    <td class="num">{{ s.staked_cents|eur }}</td>
+    <td class="num {{ 'pos' if (s.net_pnl_cents or 0) >= 0 else 'neg' }}">{{ s.net_pnl_cents|eur }}</td>
+    <td class="num">{{ "%.1f"|format((s.net_pnl_cents or 0) / s.staked_cents * 100) if s.staked_cents else '—' }}%</td>
+    <td class="num">{{ s.drift_cost_cents|eur }}</td>
+  </tr>
+  {% endfor %}
+</table></div>
+
+<h2>Recent bets</h2>
+<div class="scroll"><table>
+  <tr><th>#</th><th>source</th><th>horse</th><th>course</th><th>time</th><th>side</th>
+      <th class="num">stake</th><th class="num">tipped</th><th class="num">validated</th>
+      <th class="num">matched</th><th>state</th><th class="num">net P&amp;L</th></tr>
+  {% for b in bets %}
+  <tr>
+    <td>{{ b.id }}</td><td>{{ b.source_name }}</td><td>{{ b.horse_name }}</td>
+    <td>{{ b.course }}</td><td>{{ b.race_time_local }}</td><td>{{ b.side }}</td>
+    <td class="num">{{ b.stake_cents|eur }}</td>
+    <td class="num">{{ b.tipped_price_cents|odds }}</td>
+    <td class="num">{{ b.validated_price_cents|odds }}</td>
+    <td class="num">{{ b.matched_price_cents|odds }}</td>
+    <td>{{ b.state }}{% if b.abort_reason %} ({{ b.abort_reason }}){% endif %}</td>
+    <td class="num {{ 'pos' if (b.net_pnl_cents or 0) >= 0 else 'neg' }}">{{ b.net_pnl_cents|eur if b.net_pnl_cents is not none else '—' }}</td>
+  </tr>
+  {% endfor %}
+</table></div>
+</body>
+</html>

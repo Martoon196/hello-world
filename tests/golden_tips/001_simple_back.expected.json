@@ -1,0 +1,13 @@
+{
+  "is_tip": true,
+  "tips": [
+    {
+      "course": "Kempton",
+      "race_time": "14:35",
+      "horse_name": "Silver Dancer",
+      "side": "BACK",
+      "tipped_price": 4.5,
+      "rating": "2pts"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+# Non-secret tunables. Restart betbot to apply changes.
+
+bankroll:
+  opening_cents: 100000          # EUR 1,000.00 opening bank (only used to seed an empty ledger)
+  currency: EUR
+
+staking:
+  base_pct: 0.02                 # 2% of current bankroll per bet
+  absolute_max_stake_cents: 10000  # never stake more than EUR 100 regardless of bankroll
+  min_stake_cents: 200           # Betfair exchange minimum (EUR 2)
+  liquidity_max_pct: 0.10        # stake at most 10% of available volume at best price
+
+price_rule:
+  default_floor_pct: 0.20        # abort if available price < 80% of tipped price (per-source override in DB)
+
+limits:
+  max_bets_per_day: 15
+  daily_loss_limit_pct: 0.10     # trip breaker after realized loss of 10% of bankroll in a day
+  max_open_exposure_pct: 0.25    # max 25% of bankroll in unsettled stakes
+  too_close_to_off_seconds: 120  # don't queue bets inside 2 minutes of the off
+
+parsing:
+  model: claude-sonnet-5
+  min_confidence: 0.80
+  max_retries: 3
+
+matching:
+  min_match_score: 88            # rapidfuzz score 0-100 required to accept a runner match
+  race_time_window_minutes: 10   # tip time must be within this window of a Betfair marketStartTime
+  catalogue_cache_ttl_seconds: 300
+  countries: [GB, IE]
+
+feed:
+  bet_expiry_before_off_seconds: 60   # feed rows disappear this long before the off
+  expected_poll_interval_seconds: 30  # what BFBM is configured to poll at (watchdog uses 3x this)
+
+watchdog:
+  telegram_quiet_alert_hours: 3       # alert if no Telegram events during racing hours
+  whatsapp_heartbeat_stale_minutes: 45
+  racing_hours_utc: [9, 21]
+
+settlement:
+  results_poll_interval_seconds: 120
+  estimate_after_hours: 4        # settle estimated if BFBM export hasn't arrived N hours after the off
+  commission_pct: 0.05           # Betfair commission applied to net winnings (estimate)
+
+notifications:
+  daily_summary_hour_utc: 21
