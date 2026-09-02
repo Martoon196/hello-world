@@ -30,6 +30,7 @@ class Secrets(BaseSettings):
     feed_token: str | None = None
     whatsapp_webhook_token: str | None = None
     bfbm_results_token: str | None = None
+    dashboard_password: str | None = None
 
     betbot_db_path: str = "data/betbot.db"
     betbot_host: str = "0.0.0.0"

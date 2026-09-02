@@ -89,6 +89,7 @@ ask "Telegram api_hash (the long jumble)"                    TELEGRAM_API_HASH
 ask "Bot token (from BotFather, has a colon in it)"          TELEGRAM_BOT_TOKEN
 ask "Your chat id (the number from @userinfobot)"            TELEGRAM_ADMIN_CHAT_ID
 ask "Anthropic API key (starts sk-ant-)"                     ANTHROPIC_API_KEY
+ask "Dashboard password (username will be 'betbot'; protects the web dashboard)" DASHBOARD_PASSWORD
 echo "  Betfair (press Enter to skip any you don't have yet):"
 ask "Betfair username"                                       BETFAIR_USERNAME
 ask "Betfair password"                                       BETFAIR_PASSWORD
