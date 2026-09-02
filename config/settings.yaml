@@ -49,11 +49,10 @@ notifications:
 
 apex:
   base_url: "http://157.245.43.176:8080"   # becomes https://yourdomain once Caddy is up
-  # Map Stripe price IDs to membership: paste real price_... ids when Stripe products exist.
-  # Marketing can add/repoint tiers here with zero code changes.
-  stripe_prices: {}
-  #  price_XXXXmemberM:  {tier: member,   period: monthly}
-  #  price_XXXXmemberY:  {tier: member,   period: yearly}
-  #  price_XXXXproM:     {tier: pro,      period: monthly}
-  #  price_XXXXproY:     {tier: pro,      period: yearly}
-  #  price_XXXXfounding: {tier: founding, period: monthly}
+  # Map Stripe price IDs to membership. Marketing can add/repoint tiers here, no code.
+  stripe_prices:
+    price_1UBNiBAK3Gy9osQnyDZVYjDb: {tier: founding, period: monthly}
+    price_1UBNiBAK3Gy9osQnVghk80aQ: {tier: member,   period: monthly}
+    price_1UBNiCAK3Gy9osQn5rHTI2dm: {tier: member,   period: yearly}
+    price_1UBNiCAK3Gy9osQnmpi6wjOg: {tier: pro,      period: monthly}
+    price_1UBNiCAK3Gy9osQnPms9rndO: {tier: pro,      period: yearly}
