@@ -94,6 +94,12 @@ echo "  Betfair (press Enter to skip any you don't have yet):"
 ask "Betfair username"                                       BETFAIR_USERNAME
 ask "Betfair password"                                       BETFAIR_PASSWORD
 ask "Betfair app key (the DELAYED one)"                      BETFAIR_APP_KEY
+echo "  Apex membership (press Enter to skip until launch):"
+ask "Stripe webhook signing secret (whsec_...)"              STRIPE_WEBHOOK_SECRET
+ask "SMTP host (for sign-in emails)"                         SMTP_HOST
+ask "SMTP username"                                          SMTP_USER
+ask "SMTP password"                                          SMTP_PASSWORD
+ask "SMTP from address (e.g. hello@theapexcode.com)"         SMTP_FROM
 
 say "6/7 First Telegram login (a code will arrive IN your Telegram app)"
 if .venv/bin/python - <<'PY'

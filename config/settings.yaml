@@ -46,3 +46,14 @@ settlement:
 
 notifications:
   daily_summary_hour_utc: 21
+
+apex:
+  base_url: "http://157.245.43.176:8080"   # becomes https://yourdomain once Caddy is up
+  # Map Stripe price IDs to membership: paste real price_... ids when Stripe products exist.
+  # Marketing can add/repoint tiers here with zero code changes.
+  stripe_prices: {}
+  #  price_XXXXmemberM:  {tier: member,   period: monthly}
+  #  price_XXXXmemberY:  {tier: member,   period: yearly}
+  #  price_XXXXproM:     {tier: pro,      period: monthly}
+  #  price_XXXXproY:     {tier: pro,      period: yearly}
+  #  price_XXXXfounding: {tier: founding, period: monthly}

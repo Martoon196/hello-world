@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Members · The Apex Code{% endblock %}
+{% block content %}
+<div class="card" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:.6rem; align-items:center;">
+  <div>
+    <strong>{{ member['name'] or member['email'] }}</strong>
+    <span class="badge gold">{{ member['tier'] }}</span>
+    <span class="badge">{{ member['billing_period'] }}</span>
+    {% if not active %}<span class="badge" style="border-color:var(--loss); color:var(--loss)">{{ member['status'] }}</span>{% endif %}
+  </div>
+  <form method="post" action="/auth/logout"><button class="quiet">Sign out</button></form>
+</div>
+
+{% if not active %}
+<div class="card" style="border-color:var(--loss)">
+  Your membership is <strong>{{ member['status'] }}</strong> — access is paused.
+  Sort your billing and everything springs back.
+</div>
+{% endif %}
+
+{% if 'auto_bet' in features %}
+<h2>Auto-Bet</h2>
+<div class="card">
+  <p>How do you want your selections handled?</p>
+  <form method="post" action="/members/delivery" class="inline">
+    <select name="mode">
+      <option value="manual" {% if member['delivery_mode'] == 'manual' %}selected{% endif %}>I place my own bets</option>
+      <option value="auto" {% if member['delivery_mode'] == 'auto' %}selected{% endif %}>Auto via my BF Bot Manager</option>
+    </select>
+    <button type="submit">Save</button>
+  </form>
+  {% if member['delivery_mode'] == 'auto' and feed_url %}
+  <p style="margin-top:1rem">Your personal feed URL (treat it like a password — it's yours alone):</p>
+  <p><code>{{ feed_url }}</code></p>
+  <form method="post" action="/members/feed/rotate" class="inline">
+    <button class="quiet" type="submit">Regenerate URL (kills the old one)</button>
+  </form>
+  <p class="muted">Point your own BF Bot Manager at this URL per the setup guide. Your account,
+  your money, your stakes — this feed only carries the selections.</p>
+  {% endif %}
+</div>
+{% endif %}
+
+{% if 'selections' in features %}
+<h2>Latest selections</h2>
+<div class="card scroll">
+  {% if selections %}
+  <table>
+    <tr><th>Horse</th><th>Course</th><th>Time</th><th class="num">Published price</th><th>Status</th></tr>
+    {% for s in selections %}
+    <tr>
+      <td>{{ s['horse_name'] }}</td><td>{{ s['course'] }}</td>
+      <td class="mono">{{ s['race_time_local'] }}</td>
+      <td class="num mono">{{ s['validated_price_cents']|odds }}</td>
+      <td class="muted">{{ s['state'] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">No selections yet today. No-bet days are part of the discipline.</p>{% endif %}
+</div>
+{% endif %}
+
+{% if 'full_log' in features %}
+<h2>The log — every result, in full</h2>
+<div class="card scroll">
+  {% if log_rows %}
+  <table>
+    <tr><th>Horse</th><th>Course</th><th>Time</th><th class="num">Price</th><th>Result</th><th class="num">P/L</th></tr>
+    {% for b in log_rows %}
+    <tr>
+      <td>{{ b['horse_name'] }}</td><td>{{ b['course'] }}</td>
+      <td class="mono">{{ b['race_time_local'] }}</td>
+      <td class="num mono">{{ (b['matched_price_cents'] or b['validated_price_cents'])|odds }}</td>
+      <td class="{{ 'win' if b['state'] == 'SETTLED_WON' else ('muted' if b['state'] == 'SETTLED_VOID' else 'loss') }}">{{ b['result'] or '—' }}</td>
+      <td class="num mono {{ 'win' if (b['net_pnl_cents'] or 0) >= 0 else 'loss' }}">{{ b['net_pnl_cents']|eur }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">The log fills as results settle. Losses get logged with the same energy as wins.</p>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

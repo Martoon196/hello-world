@@ -32,6 +32,13 @@ class Secrets(BaseSettings):
     bfbm_results_token: str | None = None
     dashboard_password: str | None = None
 
+    stripe_webhook_secret: str | None = None
+    smtp_host: str | None = None
+    smtp_port: int = 587
+    smtp_user: str | None = None
+    smtp_password: str | None = None
+    smtp_from: str | None = None
+
     betbot_db_path: str = "data/betbot.db"
     betbot_host: str = "0.0.0.0"
     betbot_port: int = 8080
@@ -94,6 +101,12 @@ class NotificationsCfg(BaseModel):
     daily_summary_hour_utc: int = 21
 
 
+class ApexCfg(BaseModel):
+    base_url: str = "http://localhost:8080"
+    # Stripe price id -> {tier, period}; marketing repoints products here, no code.
+    stripe_prices: dict[str, dict[str, str]] = {}
+
+
 class Tunables(BaseModel):
     bankroll: BankrollCfg = BankrollCfg()
     staking: StakingCfg = StakingCfg()
@@ -105,6 +118,7 @@ class Tunables(BaseModel):
     watchdog: WatchdogCfg = WatchdogCfg()
     settlement: SettlementCfg = SettlementCfg()
     notifications: NotificationsCfg = NotificationsCfg()
+    apex: ApexCfg = ApexCfg()
 
 
 @lru_cache

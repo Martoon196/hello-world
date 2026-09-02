@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}The Apex Code{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:#0A0A0A; --gold:#ECB02B; --flame:#E8721C; --ember:#93471F;
+    --bone:#F2EDE3; --ash:#9A948A; --win:#3DA968; --loss:#C75B4E;
+    --card:#141414; --line:#262626;
+  }
+  * { box-sizing:border-box; }
+  body { background:var(--black); color:var(--bone); margin:0;
+         font:15px/1.55 Inter, system-ui, sans-serif; }
+  .wrap { max-width:960px; margin:0 auto; padding:1.5rem 1rem 4rem; }
+  h1,h2,h3 { font-family:'Bebas Neue', sans-serif; letter-spacing:.04em;
+             text-transform:uppercase; margin:.2rem 0 .6rem; }
+  h1 { font-size:2.2rem; } h1 .gold { color:var(--gold); }
+  h2 { font-size:1.35rem; color:var(--gold); margin-top:2.2rem; }
+  a { color:var(--gold); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px;
+          padding:1rem 1.2rem; margin:.8rem 0; }
+  .mono, td.mono, .num { font-family:'IBM Plex Mono', monospace; font-variant-numeric:tabular-nums; }
+  table { border-collapse:collapse; width:100%; font-size:.85rem; }
+  th, td { text-align:left; padding:.45rem .6rem; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th { color:var(--ash); font-weight:500; text-transform:uppercase; font-size:.7rem; letter-spacing:.08em; }
+  .num { text-align:right; }
+  .win { color:var(--win); } .loss { color:var(--loss); } .muted { color:var(--ash); }
+  .badge { display:inline-block; border:1px solid var(--line); border-radius:999px;
+           padding:.15rem .7rem; font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; }
+  .badge.gold { border-color:var(--gold); color:var(--gold); }
+  input, select { background:#1b1b1b; color:var(--bone); border:1px solid var(--line);
+                  border-radius:6px; padding:.5rem .7rem; font:inherit; }
+  button { background:var(--gold); color:#111; border:0; border-radius:6px;
+           padding:.55rem 1.1rem; font:600 .9rem Inter, sans-serif; cursor:pointer; }
+  button.quiet { background:transparent; color:var(--ash); border:1px solid var(--line); }
+  form.inline { display:inline-flex; gap:.4rem; align-items:center; }
+  .scroll { overflow-x:auto; }
+  .footer { margin-top:3rem; color:var(--ash); font-size:.75rem; border-top:1px solid var(--line);
+            padding-top:1rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; }
+  code { background:#1b1b1b; padding:.15rem .45rem; border-radius:4px;
+         font-family:'IBM Plex Mono', monospace; font-size:.8rem; word-break:break-all; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>THE <span class="gold">APEX</span> CODE</h1>
+  {% block content %}{% endblock %}
+  <div class="footer">
+    <span>Every tipster shows you their winners. We show you everything.</span>
+    <span>18+ · <a href="https://www.begambleaware.org">BeGambleAware.org</a></span>
+  </div>
+</div>
+</body>
+</html>

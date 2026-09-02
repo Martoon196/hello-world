@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Admin · The Apex Code{% endblock %}
+{% block content %}
+<h2>Tier features — the switchboard</h2>
+<p class="muted">Flip what each tier includes, live. Members inherit their tier; per-member
+overrides below beat the tier. No redeploys, no code.</p>
+<div class="card scroll">
+  <table>
+    <tr><th>Feature</th>{% for t in tiers %}<th>{{ t['display_name'] }}</th>{% endfor %}</tr>
+    {% for f in features %}
+    <tr>
+      <td title="{{ f['description'] }}">{{ f['key'] }}</td>
+      {% for t in tiers %}
+      <td>
+        <form method="post" action="/admin/tier-feature" class="inline">
+          <input type="hidden" name="tier" value="{{ t['name'] }}">
+          <input type="hidden" name="feature_key" value="{{ f['key'] }}">
+          {% if f['key'] in tier_map.get(t['name'], []) %}
+            <input type="hidden" name="enabled" value="off">
+            <button class="quiet" style="color:var(--win); border-color:var(--win)">ON</button>
+          {% else %}
+            <input type="hidden" name="enabled" value="on">
+            <button class="quiet">off</button>
+          {% endif %}
+        </form>
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<h2>Founding 50 counter</h2>
+<div class="card">
+  <form method="post" action="/admin/founding-count" class="inline">
+    <input name="count" value="{{ founding_count }}" style="width:6rem" class="mono">
+    <button type="submit">Update</button>
+  </form>
+  <p class="muted">Hand-updated only. Posted only when true.</p>
+</div>
+
+<h2>Members ({{ rows|length }})</h2>
+<div class="card">
+  <form method="post" action="/admin/member/create" class="inline">
+    <input type="email" name="email" placeholder="new member email" required style="min-width:14rem">
+    <select name="tier">{% for t in tiers %}<option value="{{ t['name'] }}">{{ t['display_name'] }}</option>{% endfor %}</select>
+    <button type="submit">Add manually</button>
+  </form>
+</div>
+
+{% for row in rows %}
+<div class="card">
+  <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem;">
+    <div>
+      <strong>{{ row.m['email'] }}</strong> {% if row.m['name'] %}<span class="muted">({{ row.m['name'] }})</span>{% endif %}
+      <span class="badge gold">{{ row.m['tier'] }}</span>
+      <span class="badge">{{ row.m['billing_period'] }}</span>
+      <span class="badge {% if row.m['status'] not in ('active','trialing') %}loss{% endif %}">{{ row.m['status'] }}</span>
+      <span class="badge">{{ row.m['delivery_mode'] }}</span>
+    </div>
+    <span class="muted mono">#{{ row.m['id'] }}</span>
+  </div>
+  <form method="post" action="/admin/member/{{ row.m['id'] }}" class="inline" style="margin-top:.6rem; flex-wrap:wrap;">
+    <select name="tier">{% for t in tiers %}<option value="{{ t['name'] }}" {% if t['name'] == row.m['tier'] %}selected{% endif %}>{{ t['display_name'] }}</option>{% endfor %}</select>
+    <select name="billing_period">{% for p in periods %}<option {% if p == row.m['billing_period'] %}selected{% endif %}>{{ p }}</option>{% endfor %}</select>
+    <select name="status">{% for s in statuses %}<option {% if s == row.m['status'] %}selected{% endif %}>{{ s }}</option>{% endfor %}</select>
+    <select name="delivery_mode">
+      <option value="manual" {% if row.m['delivery_mode'] == 'manual' %}selected{% endif %}>manual</option>
+      <option value="auto" {% if row.m['delivery_mode'] == 'auto' %}selected{% endif %}>auto</option>
+    </select>
+    <button type="submit">Save</button>
+  </form>
+  <div style="margin-top:.5rem">
+    <span class="muted">Effective:</span>
+    {% for f in row.features %}<span class="badge" style="border-color:var(--win); color:var(--win)">{{ f }}</span> {% endfor %}
+  </div>
+  <div style="margin-top:.4rem">
+    {% for f in features %}
+    <form method="post" action="/admin/member/{{ row.m['id'] }}/feature" class="inline" style="margin:.15rem .2rem;">
+      <input type="hidden" name="feature_key" value="{{ f['key'] }}">
+      <select name="state" title="{{ f['key'] }}">
+        <option value="default" {% if f['key'] not in row.overrides %}selected{% endif %}>{{ f['key'] }}: tier default</option>
+        <option value="on" {% if row.overrides.get(f['key']) == True %}selected{% endif %}>{{ f['key'] }}: force ON</option>
+        <option value="off" {% if row.overrides.get(f['key']) == False %}selected{% endif %}>{{ f['key'] }}: force OFF</option>
+      </select>
+      <button class="quiet" type="submit">set</button>
+    </form>
+    {% endfor %}
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

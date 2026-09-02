@@ -67,11 +67,22 @@ async def amain() -> None:
     pipeline = Pipeline(repo, betfair, executor, notifier)
     reconciler = Reconciler(repo, notifier)
 
+    from betbot.members.admin import build_admin_router
+    from betbot.members.auth import build_auth_router
+    from betbot.members.portal import build_portal_router
+    from betbot.members.repo import MembersRepo
+    from betbot.members.stripe_webhook import build_stripe_router
+    mrepo = MembersRepo(repo)
+
     app = FastAPI(title="betbot", docs_url=None, redoc_url=None, openapi_url=None)
     app.include_router(build_feed_router(repo))
     app.include_router(build_whatsapp_router(repo, pipeline))
     app.include_router(build_bfbm_results_router(repo, reconciler))
     app.include_router(build_heartbeat_router(repo))
+    app.include_router(build_auth_router(mrepo, notifier))
+    app.include_router(build_portal_router(repo, mrepo))
+    app.include_router(build_admin_router(mrepo, repo))
+    app.include_router(build_stripe_router(mrepo, notifier))
     app.include_router(build_dashboard_router(repo))
 
     scheduler = AsyncIOScheduler(timezone="UTC")

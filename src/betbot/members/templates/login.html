@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Sign in · The Apex Code{% endblock %}
+{% block content %}
+<h2>Member sign-in</h2>
+{% if expired %}
+<div class="card" style="border-color:var(--loss)">
+  That sign-in link has expired or was already used. Request a fresh one below.
+</div>
+{% endif %}
+<div class="card">
+  <p class="muted">No passwords here. Enter your member email and we'll send you a
+  one-time sign-in link (valid 30 minutes).</p>
+  <form method="post" action="/auth/request" class="inline">
+    <input type="email" name="email" placeholder="you@example.com" required style="min-width:16rem">
+    <button type="submit">Send my link</button>
+  </form>
+</div>
+{% endblock %}
