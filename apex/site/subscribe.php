@@ -46,5 +46,39 @@ curl_exec($ch);
 $status = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 curl_close($ch);
 
-if ($status >= 200 && $status < 300) { header('Location: /thanks.html'); exit; }
+if ($status >= 200 && $status < 300) {
+    send_welcome_email($email);
+    header('Location: /thanks.html'); exit;
+}
 header('Location: /?signup=error#paddock');
+
+// Welcome email via SiteGround's local mail for this domain (no SMTP creds needed).
+// Failure is non-fatal: the signup is already captured in Notion.
+function send_welcome_email(string $email): void
+{
+    $subject = "You're in — welcome to The Paddock";
+    $body = <<<TXT
+You're in.
+
+The Paddock is the free tier of The Apex Code. Here's what lands in your inbox:
+
+- One free selection a week — the same quality that goes to members.
+- The full results log every Sunday. Every bet, wins and losses alike.
+  The log never loses a row.
+
+The live feed runs on Telegram: https://t.me/TheApexCodeUK
+
+Questions? Just reply to this email.
+
+— The Apex Code
+https://apexcode.uk
+
+18+ only. Gamble responsibly: https://www.begambleaware.org
+You joined this list at apexcode.uk. To leave it, reply with "unsubscribe".
+TXT;
+    $headers = "From: The Apex Code <hello@apexcode.uk>\r\n"
+             . "Reply-To: hello@apexcode.uk\r\n"
+             . "MIME-Version: 1.0\r\n"
+             . "Content-Type: text/plain; charset=UTF-8\r\n";
+    @mail($email, $subject, $body, $headers, '-fhello@apexcode.uk');
+}
