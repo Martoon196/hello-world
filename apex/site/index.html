@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Apex Code — UK Betting Research, Receipts First</title>
+<meta name="description" content="Every tipster shows you their winners. We show you everything. UK horse racing and football betting research with a public log — wins, losses, and no-bet days.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:#0A0A0A; --gold:#ECB02B; --flame:#E8721C; --ember:#93471F;
+    --bone:#F2EDE3; --ash:#9A948A; --win:#3DA968; --loss:#C75B4E;
+    --card:#131313; --line:#262626;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--black); color:var(--bone); margin:0;
+         font:16px/1.6 Inter, system-ui, sans-serif; }
+  .wrap { max-width:980px; margin:0 auto; padding:0 1.25rem; }
+  h1,h2,h3,.display { font-family:'Bebas Neue', sans-serif; letter-spacing:.04em;
+                      text-transform:uppercase; line-height:1.05; margin:0; }
+  .gold { color:var(--gold); }
+  .mono { font-family:'IBM Plex Mono', monospace; font-variant-numeric:tabular-nums; }
+  a { color:var(--gold); }
+
+  header { padding:1.1rem 0; border-bottom:1px solid var(--line);
+           display:flex; justify-content:center; }
+  header .wrap { display:flex; justify-content:space-between; align-items:center; width:100%; }
+  .brand { font-family:'Bebas Neue', sans-serif; font-size:1.5rem; letter-spacing:.06em; }
+  .agebadge { font-size:.72rem; color:var(--ash); border:1px solid var(--line);
+              border-radius:999px; padding:.25rem .7rem; white-space:nowrap; }
+
+  .hero { padding:4.5rem 0 3rem; text-align:center; }
+  .hero h1 { font-size:clamp(2.6rem, 7vw, 4.6rem); }
+  .hero p.sub { color:var(--ash); max-width:44rem; margin:1.2rem auto 0; font-size:1.05rem; }
+  .cta { display:inline-block; background:var(--gold); color:#111; font-weight:700;
+         padding:.85rem 1.8rem; border-radius:8px; text-decoration:none; margin-top:1.8rem; }
+  .cta.quiet { background:transparent; color:var(--bone); border:1px solid var(--line); }
+  .strap { display:flex; flex-wrap:wrap; gap:.6rem 1.6rem; justify-content:center;
+           color:var(--ash); font-size:.85rem; margin-top:2rem; }
+  .strap span::before { content:"— "; color:var(--gold); }
+
+  section { padding:3.2rem 0; border-top:1px solid var(--line); }
+  section h2 { font-size:2rem; margin-bottom:1.2rem; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px;
+          padding:1.4rem 1.5rem; }
+
+  table { border-collapse:collapse; width:100%; font-size:.9rem; }
+  th, td { text-align:left; padding:.55rem .7rem; border-bottom:1px solid var(--line); }
+  th { color:var(--ash); font-weight:500; text-transform:uppercase; font-size:.7rem; letter-spacing:.1em; }
+  .num { text-align:right; }
+  .w { color:var(--win); font-weight:600; } .l { color:var(--loss); font-weight:600; }
+  .tbc { color:var(--ash); }
+  .lognote { color:var(--ash); font-size:.82rem; margin-top:.9rem; }
+  .scroll { overflow-x:auto; }
+
+  .systems { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); }
+  .systems h3 { font-size:1.3rem; color:var(--gold); margin-bottom:.6rem; }
+  .systems ul { margin:.4rem 0 0; padding-left:1.1rem; color:var(--ash); }
+  .systems li { margin:.3rem 0; }
+  .systems li strong { color:var(--bone); font-weight:600; }
+
+  .tiers { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); }
+  .tier { display:flex; flex-direction:column; }
+  .tier .price { font-family:'Bebas Neue', sans-serif; font-size:2.2rem; margin:.4rem 0; }
+  .tier .price small { font-size:1rem; color:var(--ash); font-family:Inter, sans-serif; }
+  .tier ul { padding-left:1.1rem; color:var(--ash); flex:1; }
+  .tier li { margin:.3rem 0; }
+  .tier .cta { text-align:center; margin-top:1rem; }
+  .tier.featured { border-color:var(--gold); position:relative; }
+  .tier.featured::before { content:"FOUNDING 50 — LOCKED FOR LIFE"; position:absolute; top:-.7rem;
+    left:50%; transform:translateX(-50%); background:var(--gold); color:#111;
+    font:600 .65rem/1 Inter, sans-serif; letter-spacing:.08em; padding:.3rem .7rem; border-radius:999px;
+    white-space:nowrap; }
+  .openssoon { color:var(--flame); font-size:.8rem; margin-top:.6rem; text-align:center; }
+
+  .guarantee { border-left:4px solid var(--gold); }
+
+  form.paddock { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1.2rem; }
+  form.paddock input[type=email] { flex:1; min-width:14rem; background:#1b1b1b; color:var(--bone);
+    border:1px solid var(--line); border-radius:8px; padding:.85rem 1rem; font:inherit; }
+  form.paddock button { background:var(--gold); color:#111; border:0; border-radius:8px;
+    padding:.85rem 1.6rem; font:700 1rem Inter, sans-serif; cursor:pointer; }
+  .hp { position:absolute; left:-5000px; opacity:0; height:0; overflow:hidden; }
+
+  footer { border-top:1px solid var(--line); padding:2.2rem 0 3rem; color:var(--ash); font-size:.82rem; }
+  footer .wrap { display:flex; flex-direction:column; gap:.5rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">THE <span class="gold">APEX</span> CODE</div>
+    <div class="agebadge">18+ · <a href="https://www.begambleaware.org">BeGambleAware.org</a></div>
+  </div>
+</header>
+
+<div class="hero wrap">
+  <h1>EVERY TIPSTER SHOWS YOU<br>THEIR WINNERS.<br><span class="gold">WE SHOW YOU EVERYTHING.</span></h1>
+  <p class="sub">The Apex Code is a UK betting research membership built on one idea:
+  discipline is the product. Every selection logged. Every loss published in full.
+  Every no-bet day announced and explained.</p>
+  <a class="cta" href="#paddock">Join The Paddock — free</a>
+  <a class="cta quiet" href="https://t.me/TheApexCodeUK">Follow on Telegram</a>
+  <div class="strap">
+    <span>Losses posted with the same energy as wins</span>
+    <span>Stakes always a % of an affordable bank</span>
+    <span>No-bet days are a flex, not a failure</span>
+  </div>
+</div>
+
+<section id="log">
+  <div class="wrap">
+    <h2>The record <span class="gold">so far</span></h2>
+    <div class="card scroll">
+      <table class="mono">
+        <tr><th>Date</th><th>Selection</th><th>Course</th><th>Target</th><th class="num">Result</th></tr>
+        <tr><td>24 Aug</td><td>The Mean Fiddler</td><td>—</td><td>Place 1st–3rd</td><td class="num w">1st ✓</td></tr>
+        <tr><td>25 Aug</td><td>Luminous Warrior</td><td>—</td><td>Place 1st–3rd</td><td class="num w">2nd ✓</td></tr>
+        <tr><td>27 Aug</td><td>Kanzi</td><td>—</td><td>Place 1st–3rd</td><td class="num l">5th ✗</td></tr>
+        <tr><td>28 Aug</td><td>Withtearsinmyeyes</td><td>—</td><td>Place 1st–3rd</td><td class="num w">1st ✓</td></tr>
+        <tr><td>29 Aug</td><td>Majestic Flame</td><td>—</td><td>Place 1st–3rd</td><td class="num l">9th ✗</td></tr>
+        <tr><td>30 Aug</td><td>Galyx</td><td>Beverley 13:40</td><td>Place 1st–3rd</td><td class="num tbc">Settling…</td></tr>
+      </table>
+      <p class="lognote">That's the entire record — five settled, one settling. Not a highlight reel.
+      Results are logged within 24 hours of the race, losses in full. The complete staking log
+      (every pound, every price) publishes with the member launch.</p>
+    </div>
+  </div>
+</section>
+
+<section id="systems">
+  <div class="wrap">
+    <h2>Two systems. <span class="gold">One discipline.</span></h2>
+    <div class="systems">
+      <div class="card">
+        <h3>Apex Anchor · Horse Racing</h3>
+        <ul>
+          <li><strong>Place-only selections</strong> — the horse to finish 1st–3rd</li>
+          <li><strong>One selection</strong> per qualifying day, delivered ~10:00 UK</li>
+          <li><strong>Stake: 3% of current bank</strong>, published before the off</li>
+          <li><strong>Minimum place price 1.30</strong> — drops below pre-off? No bet. Rules beat feelings.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Apex Football Gold · Football</h3>
+        <ul>
+          <li><strong>Bets placed to date: zero.</strong> On purpose.</li>
+          <li>Requires <strong>5 competitive current-season matches</strong> per team before a fixture is even assessed</li>
+          <li>First qualifying runs expected <strong>September 2026</strong></li>
+          <li>Most services would never show you a system waiting. We think the waiting <em>is</em> the system.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="membership">
+  <div class="wrap">
+    <h2>Membership <span class="gold">opens soon</span></h2>
+    <p style="color:var(--ash); max-width:44rem;">We don't sell before we've proved.
+    The public log runs first; membership opens once it's earned an audience.
+    Paddock members hear the moment doors open — and the first 50 lock the founding rate for life.</p>
+    <div class="tiers" style="margin-top:2rem;">
+      <div class="card tier featured">
+        <h3>Founding 50</h3>
+        <div class="price">£14.95<small>/month</small></div>
+        <ul>
+          <li>Full Apex Member access</li>
+          <li>Rate locked for life</li>
+          <li>Strictly the first 50 members — the counter is public and never faked</li>
+          <li>Rate retires for good at 90 days of public log</li>
+        </ul>
+        <a class="cta quiet" href="#paddock">Get first refusal via The Paddock</a>
+        <div class="openssoon">Opens after the proof-in-public fortnight</div>
+      </div>
+      <div class="card tier">
+        <h3>Apex Member</h3>
+        <div class="price">£24.95<small>/month · £249/yr</small></div>
+        <ul>
+          <li>Every selection, delivered ~10:00 by Telegram &amp; email</li>
+          <li>The full log, wins and losses alike</li>
+          <li>No-bet days announced with reasons</li>
+        </ul>
+        <a class="cta quiet" href="#paddock">Join the list</a>
+        <div class="openssoon">Opens after the proof-in-public fortnight</div>
+      </div>
+      <div class="card tier">
+        <h3>Apex Pro</h3>
+        <div class="price">£44.95<small>/month · £449/yr</small></div>
+        <ul>
+          <li>Everything in Member</li>
+          <li>Bank tracker sheet</li>
+          <li>Monthly debrief video + member Q&amp;A</li>
+        </ul>
+        <a class="cta quiet" href="#paddock">Join the list</a>
+        <div class="openssoon">Opens after the proof-in-public fortnight</div>
+      </div>
+    </div>
+    <div class="card guarantee" style="margin-top:1.5rem;">
+      <h3 style="font-size:1.2rem;">The Discipline Guarantee</h3>
+      <p style="color:var(--ash); margin:.5rem 0 0;">If we ever break a published rule —
+      a result left unlogged, a stake above the cap, a bet forced on a no-bet day —
+      that month is free. The rules are the product; breaking them costs us, not you.
+      Plus: pause any time instead of cancelling, refer a friend and you both get a month,
+      and a 14-day cooling-off period on every plan.</p>
+    </div>
+  </div>
+</section>
+
+<section id="paddock">
+  <div class="wrap">
+    <h2>Start in <span class="gold">The Paddock</span> — free</h2>
+    <div class="card">
+      <p style="margin:0; color:var(--ash);">One free tip a week · the full log in your inbox every
+      Sunday · the <strong style="color:var(--bone);">Bank Builder</strong> guide to staking like the
+      system does. No spam, no pressure — and first refusal on the Founding 50.</p>
+      <form class="paddock" method="post" action="/subscribe.php">
+        <input type="email" name="email" placeholder="you@example.com" required maxlength="254">
+        <div class="hp" aria-hidden="true">
+          <label>Company <input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <button type="submit">Join free</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><strong style="color:var(--bone);">The Apex Code</strong> · UK betting research ·
+      <a href="https://t.me/TheApexCodeUK">t.me/TheApexCodeUK</a> ·
+      <a href="mailto:hello@apexcode.uk">hello@apexcode.uk</a></div>
+    <div>18+ only · <a href="https://www.begambleaware.org">BeGambleAware.org</a> ·
+      Betting involves risk. Only ever stake what you can comfortably afford to lose,
+      as a small percentage of a bank set aside for the purpose.</div>
+    <div>Nothing on this site is a promise of profit. Past results are a record, not a prediction.</div>
+  </div>
+</footer>
+
+</body>
+</html>
