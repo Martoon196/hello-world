@@ -28,9 +28,16 @@ async def send_magic_link(email: str, link: str, notifier=None) -> bool:
             "If you didn't request this, ignore this email.\n\n"
             "The Apex Code · 18+ · BeGambleAware.org"
         )
+        port = s.smtp_port or 587
         try:
-            with smtplib.SMTP(s.smtp_host, s.smtp_port or 587, timeout=20) as smtp:
-                smtp.starttls()
+            # Port 465 is implicit SSL; anything else is plain SMTP upgraded via STARTTLS.
+            if port == 465:
+                smtp_ctx = smtplib.SMTP_SSL(s.smtp_host, port, timeout=20)
+            else:
+                smtp_ctx = smtplib.SMTP(s.smtp_host, port, timeout=20)
+            with smtp_ctx as smtp:
+                if port != 465:
+                    smtp.starttls()
                 if s.smtp_user:
                     smtp.login(s.smtp_user, s.smtp_password or "")
                 smtp.send_message(msg)
