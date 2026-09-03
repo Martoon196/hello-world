@@ -48,7 +48,7 @@ notifications:
   daily_summary_hour_utc: 21
 
 apex:
-  base_url: "http://157.245.43.176:8080"   # becomes https://yourdomain once Caddy is up
+  base_url: "https://members.apexcode.uk"   # served by Caddy (reverse proxy to :8080)
   # Map Stripe price IDs to membership. Marketing can add/repoint tiers here, no code.
   stripe_prices:
     price_1UBNiBAK3Gy9osQnyDZVYjDb: {tier: founding, period: monthly}
