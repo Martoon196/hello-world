@@ -43,6 +43,12 @@ async def _daily_summary(repo: Repo, notifier: Notifier) -> None:
         bankroll_cents=repo.current_bankroll_cents(), drift_cost_cents=drift))
 
 
+async def _reprice_parked_tips(repo: Repo, pipeline: Pipeline) -> None:
+    """Tips parked overnight for illiquidity get one re-pricing pass near the off."""
+    for tip_id in repo.tips_to_reprice():
+        await pipeline.revisit_tip(tip_id)
+
+
 async def _retry_failed_parses(repo: Repo, pipeline: Pipeline) -> None:
     """Give parse_failed messages another go (API blips, config fixes)."""
     for raw_id in repo.recent_parse_failures():
@@ -100,6 +106,8 @@ async def amain() -> None:
         scheduler.add_job(lambda: asyncio.to_thread(betfair.keep_alive), "interval", minutes=15)
     scheduler.add_job(watchdog_check, "interval", minutes=5, args=[repo, notifier])
     scheduler.add_job(_retry_failed_parses, "interval", minutes=10, args=[repo, pipeline])
+    if betfair:
+        scheduler.add_job(_reprice_parked_tips, "interval", minutes=5, args=[repo, pipeline])
     scheduler.add_job(_daily_summary, "cron", hour=cfg.notifications.daily_summary_hour_utc,
                       args=[repo, notifier])
     scheduler.start()

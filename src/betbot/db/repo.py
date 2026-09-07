@@ -97,6 +97,28 @@ class Repo:
         )
         return row is not None
 
+    def tips_to_reprice(self, window_minutes: int = 45, cooloff_minutes: int = 40) -> list[int]:
+        """Tips whose only obstacle was a sleepy market (night-before tips):
+        latest bet ABORTED for illiquidity/min-stake, race starting inside the
+        window, no successful bet yet. The cool-off keeps it to one re-pricing
+        pass — a fresh abort near the off is a real answer, not bad timing."""
+        rows = self._all(
+            """SELECT t.id FROM tips t
+               JOIN bets b ON b.id = (SELECT id FROM bets WHERE tip_id = t.id
+                                      ORDER BY id DESC LIMIT 1)
+               WHERE b.state = 'ABORTED'
+                 AND b.abort_reason IN ('LIQUIDITY_TOO_LOW', 'STAKE_BELOW_MIN')
+                 AND datetime(b.approved_at) <= datetime('now', ?)
+                 AND NOT EXISTS (SELECT 1 FROM bets b2
+                                 WHERE b2.tip_id = t.id AND b2.state != 'ABORTED')
+                 AND t.market_start_time IS NOT NULL
+                 AND datetime(t.market_start_time) > datetime('now')
+                 AND datetime(t.market_start_time) <= datetime('now', ?)
+               ORDER BY t.market_start_time""",
+            (f"-{cooloff_minutes} minutes", f"+{window_minutes} minutes"),
+        )
+        return [r["id"] for r in rows]
+
     def recent_parse_failures(self, hours: int = 12) -> list[int]:
         """raw_message ids stuck in parse_failed, newest window only (for retry)."""
         rows = self._all(
@@ -111,14 +133,16 @@ class Repo:
 
     def insert_tip(self, *, raw_message_id: int, source_id: int, course: str, race_time_local: str,
                    horse_name: str, side: str, tipped_price_cents: int | None, rating: str | None,
-                   parse_confidence: float, parse_model: str, parse_raw_json: str) -> int:
+                   parse_confidence: float, parse_model: str, parse_raw_json: str,
+                   bet_market: str = "WIN") -> int:
         cur = self._exec(
             """INSERT INTO tips (raw_message_id, source_id, course, race_time_local, horse_name, side,
                                  tipped_price_cents, rating, parse_confidence, parse_model,
-                                 parse_raw_json, created_at)
-               VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+                                 parse_raw_json, bet_market, created_at)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (raw_message_id, source_id, course, race_time_local, horse_name, side,
-             tipped_price_cents, rating, parse_confidence, parse_model, parse_raw_json, utcnow()),
+             tipped_price_cents, rating, parse_confidence, parse_model, parse_raw_json,
+             bet_market, utcnow()),
         )
         return cur.lastrowid
 

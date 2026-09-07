@@ -8,7 +8,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from betbot.config import tunables
 from betbot.db.repo import Repo
@@ -74,12 +74,25 @@ class Pipeline:
                 rating=tip.rating, parse_confidence=tip.confidence,
                 parse_model=cfg.parsing.model,
                 parse_raw_json=parsed.model_dump_json(),
+                bet_market=tip.bet_market,
             )
-            await self._process_tip(tip_id, source, bet_market=tip.bet_market)
+            await self._process_tip(tip_id, source)
 
-    async def _process_tip(self, tip_id: int, source, bet_market: str = "WIN") -> None:
+    async def revisit_tip(self, tip_id: int) -> None:
+        """Re-run validation + rules for a tip parked earlier (overnight illiquidity)."""
+        tip = self.repo.get_tip(tip_id)
+        if tip is None:
+            return
+        source = self.repo._one("SELECT * FROM sources WHERE id=?", (tip["source_id"],))
+        if source is None or not source["is_whitelisted"]:
+            return
+        log.info("re-pricing parked tip %s near the off", tip_id)
+        await self._process_tip(tip_id, source)
+
+    async def _process_tip(self, tip_id: int, source) -> None:
         cfg = tunables()
         tip = self.repo.get_tip(tip_id)
+        bet_market = tip["bet_market"] or "WIN"
         now = datetime.now(timezone.utc)
 
         # Validate against Betfair (delayed key). Fails closed on API problems.
@@ -169,6 +182,16 @@ class Pipeline:
         )
 
         if not decision.approved:
+            # A thin market long before the off isn't a "no" — it's "not yet".
+            # The scheduler re-prices these tips ~40 min before the race.
+            if (decision.abort_reason in (g.AbortReason.LIQUIDITY_TOO_LOW,
+                                          g.AbortReason.STAKE_BELOW_MIN)
+                    and match.market.market_start_time - now > timedelta(minutes=45)):
+                await self.notifier.send(
+                    f"⏸ Parked: {match.runner.name} ({match.market.venue} "
+                    f"{match.market.market_start_time:%H:%M}) — market too quiet this far "
+                    f"from the off; will re-price ~40 min before the race.")
+                return
             await self.notifier.send(messages.bet_aborted(
                 horse=match.runner.name, course=match.market.venue,
                 reason=decision.abort_reason.value if decision.abort_reason else "?",
