@@ -97,6 +97,16 @@ class Repo:
         )
         return row is not None
 
+    def recent_parse_failures(self, hours: int = 12) -> list[int]:
+        """raw_message ids stuck in parse_failed, newest window only (for retry)."""
+        rows = self._all(
+            """SELECT id FROM raw_messages
+               WHERE status='parse_failed' AND received_at >= datetime('now', ?)
+               ORDER BY id""",
+            (f"-{hours} hours",),
+        )
+        return [r["id"] for r in rows]
+
     # ---- tips ----
 
     def insert_tip(self, *, raw_message_id: int, source_id: int, course: str, race_time_local: str,

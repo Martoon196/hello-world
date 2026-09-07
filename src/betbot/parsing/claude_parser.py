@@ -13,7 +13,7 @@ from pathlib import Path
 
 import anthropic
 
-from betbot.config import tunables
+from betbot.config import secrets, tunables
 from betbot.parsing.models import ParsedMessage
 
 log = logging.getLogger(__name__)
@@ -46,7 +46,11 @@ def parse_message(message_text: str | None, image_path: str | None = None,
                   client: anthropic.Anthropic | None = None) -> ParsedMessage:
     """Parse one raw message into structured tips. Raises ParseError on API failure."""
     cfg = tunables().parsing
-    client = client or anthropic.Anthropic()
+    if client is None:
+        api_key = secrets().anthropic_api_key
+        if not api_key:
+            raise ParseError("ANTHROPIC_API_KEY is not set in .env — run setup.sh to add it")
+        client = anthropic.Anthropic(api_key=api_key)
 
     content: list[dict] = []
     if image_path:

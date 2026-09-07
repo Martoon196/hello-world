@@ -43,6 +43,13 @@ async def _daily_summary(repo: Repo, notifier: Notifier) -> None:
         bankroll_cents=repo.current_bankroll_cents(), drift_cost_cents=drift))
 
 
+async def _retry_failed_parses(repo: Repo, pipeline: Pipeline) -> None:
+    """Give parse_failed messages another go (API blips, config fixes)."""
+    for raw_id in repo.recent_parse_failures():
+        log.info("retrying parse_failed raw_message %s", raw_id)
+        await pipeline.process_raw_message(raw_id)
+
+
 async def amain() -> None:
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)s %(name)s %(message)s")
@@ -92,6 +99,7 @@ async def amain() -> None:
                           args=[repo, betfair, reconciler])
         scheduler.add_job(lambda: asyncio.to_thread(betfair.keep_alive), "interval", minutes=15)
     scheduler.add_job(watchdog_check, "interval", minutes=5, args=[repo, notifier])
+    scheduler.add_job(_retry_failed_parses, "interval", minutes=10, args=[repo, pipeline])
     scheduler.add_job(_daily_summary, "cron", hour=cfg.notifications.daily_summary_hour_utc,
                       args=[repo, notifier])
     scheduler.start()
