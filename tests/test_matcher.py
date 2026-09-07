@@ -7,12 +7,14 @@ from betbot.validation.matcher import match_tip
 NOW = datetime(2026, 8, 27, 12, 0, tzinfo=timezone.utc)
 
 
-def market(venue: str, hour: int, minute: int, runners: list[str], market_id: str = "1.1") -> MarketInfo:
+def market(venue: str, hour: int, minute: int, runners: list[str], market_id: str = "1.1",
+           day: int = 27, market_type: str = "WIN") -> MarketInfo:
     # August: UK is UTC+1, so 14:35 UK local = 13:35 UTC
     return MarketInfo(
         market_id=market_id, event_name=f"{venue} race", venue=venue,
-        market_start_time=datetime(2026, 8, 27, hour, minute, tzinfo=timezone.utc),
+        market_start_time=datetime(2026, 8, day, hour, minute, tzinfo=timezone.utc),
         runners=[RunnerInfo(i + 1, name) for i, name in enumerate(runners)],
+        market_type=market_type,
     )
 
 
@@ -66,3 +68,22 @@ def test_unparseable_time_refuses():
     markets = [market("Kempton", 13, 35, ["Silver Dancer"])]
     m = match_tip("Kempton", "next race", "Silver Dancer", markets, NOW)
     assert not m.ok and "unparseable" in m.reason
+
+
+def test_evening_tip_for_tomorrows_race_matches():
+    # Tip posted at 21:00 for a 14:35 race = tomorrow's card, not a race in the past.
+    evening = datetime(2026, 8, 27, 21, 0, tzinfo=timezone.utc)
+    markets = [market("Goodwood", 13, 35, ["Marengo Storm"], "1.9", day=28)]
+    m = match_tip("Goodwood", "14:35", "Marengo Storm", markets, evening)
+    assert m.ok and m.market.market_id == "1.9"
+
+
+def test_place_only_tip_matches_place_market():
+    markets = [
+        market("Goodwood", 13, 35, ["Marengo Storm", "Red Baron"], "1.10", market_type="WIN"),
+        market("Goodwood", 13, 35, ["Marengo Storm", "Red Baron"], "1.11", market_type="PLACE"),
+    ]
+    win = match_tip("Goodwood", "14:35", "Marengo Storm", markets, NOW)
+    place = match_tip("Goodwood", "14:35", "Marengo Storm", markets, NOW, bet_market="PLACE")
+    assert win.ok and win.market.market_id == "1.10"
+    assert place.ok and place.market.market_id == "1.11"

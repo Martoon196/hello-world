@@ -75,16 +75,16 @@ class Pipeline:
                 parse_model=cfg.parsing.model,
                 parse_raw_json=parsed.model_dump_json(),
             )
-            await self._process_tip(tip_id, source)
+            await self._process_tip(tip_id, source, bet_market=tip.bet_market)
 
-    async def _process_tip(self, tip_id: int, source) -> None:
+    async def _process_tip(self, tip_id: int, source, bet_market: str = "WIN") -> None:
         cfg = tunables()
         tip = self.repo.get_tip(tip_id)
         now = datetime.now(timezone.utc)
 
         # Validate against Betfair (delayed key). Fails closed on API problems.
         try:
-            markets = await asyncio.to_thread(self.betfair.todays_win_markets)
+            markets = await asyncio.to_thread(self.betfair.todays_markets)
         except Exception:
             log.exception("betfair catalogue unavailable — failing closed")
             self.repo.set_tip_status(tip_id, "match_failed")
@@ -93,7 +93,8 @@ class Pipeline:
                 why="Betfair unavailable for validation — no bet placed (fail closed)"))
             return
 
-        match = match_tip(tip["course"], tip["race_time_local"], tip["horse_name"], markets, now)
+        match = match_tip(tip["course"], tip["race_time_local"], tip["horse_name"], markets, now,
+                          bet_market=bet_market)
         if not match.ok:
             self.repo.set_tip_status(tip_id, "match_failed")
             self.repo.log_guardrail(tip_id=tip_id, bet_id=None, rule="market_match", outcome="abort",
@@ -189,7 +190,8 @@ class Pipeline:
         await self.notifier.send(prefix + messages.bet_queued(
             horse=match.runner.name, course=match.market.venue,
             race_time=match.market.market_start_time.strftime("%H:%M"),
-            side=tip["side"], stake_cents=decision.approved_bet.stake_cents,
+            side=tip["side"] + (" · PLACE market" if bet_market == "PLACE" else ""),
+            stake_cents=decision.approved_bet.stake_cents,
             available_cents=available_price_cents or 0,
             tipped_cents=tip["tipped_price_cents"], source=source["display_name"]))
 

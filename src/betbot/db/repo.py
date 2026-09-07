@@ -85,9 +85,13 @@ class Repo:
         self._exec("UPDATE raw_messages SET status=? WHERE id=?", (status, raw_id))
 
     def recent_duplicate_hash(self, content_hash: str, exclude_id: int, hours: int = 24) -> bool:
+        # Copies that were never processed (skipped for whitelist or as duplicates
+        # themselves) don't count as originals — otherwise a message posted before
+        # its source was whitelisted blocks the legitimate re-post forever.
         row = self._one(
             """SELECT 1 FROM raw_messages
-               WHERE content_hash=? AND id != ? AND status != 'skipped_duplicate'
+               WHERE content_hash=? AND id != ?
+                 AND status NOT IN ('skipped_duplicate', 'skipped_not_whitelisted')
                  AND received_at >= datetime('now', ?)""",
             (content_hash, exclude_id, f"-{hours} hours"),
         )

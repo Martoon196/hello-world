@@ -36,6 +36,7 @@ class MarketInfo:
     venue: str               # e.g. "Kempton"
     market_start_time: datetime
     runners: list[RunnerInfo] = field(default_factory=list)
+    market_type: str = "WIN"  # WIN or PLACE ("To Be Placed")
 
 
 @dataclass
@@ -78,8 +79,12 @@ class BetfairClient:
             log.exception("betfair keep_alive failed")
             self._logged_in = False
 
-    def todays_win_markets(self) -> list[MarketInfo]:
-        """WIN markets for today's horse racing in configured countries, cached."""
+    def todays_markets(self) -> list[MarketInfo]:
+        """WIN + PLACE markets for horse racing in configured countries, cached.
+
+        PLACE ("To Be Placed") is a separate Betfair market on the same race —
+        needed for place-only tips.
+        """
         cfg = tunables().matching
         now = time.monotonic()
         if self._catalogue_cache and now - self._catalogue_fetched_at < cfg.catalogue_cache_ttl_seconds:
@@ -91,19 +96,21 @@ class BetfairClient:
         market_filter = filters.market_filter(
             event_type_ids=[HORSE_RACING_EVENT_TYPE_ID],
             market_countries=cfg.countries,
-            market_type_codes=["WIN"],
+            market_type_codes=["WIN", "PLACE"],
             market_start_time={"from": start.strftime("%Y-%m-%dT%H:%M:%SZ"),
                                "to": end.strftime("%Y-%m-%dT%H:%M:%SZ")},
         )
         catalogues = self.trading.betting.list_market_catalogue(
             filter=market_filter,
-            market_projection=["EVENT", "MARKET_START_TIME", "RUNNER_DESCRIPTION"],
-            max_results=200,
+            market_projection=["EVENT", "MARKET_START_TIME", "RUNNER_DESCRIPTION",
+                               "MARKET_DESCRIPTION"],
+            max_results=400,
             sort="FIRST_TO_START",
         )
         markets: list[MarketInfo] = []
         for cat in catalogues:
             venue = (cat.event.venue or cat.event.name or "").strip()
+            mtype = (cat.description.market_type if cat.description else None) or "WIN"
             markets.append(MarketInfo(
                 market_id=cat.market_id,
                 event_name=cat.event.name or venue,
@@ -111,11 +118,15 @@ class BetfairClient:
                 market_start_time=cat.market_start_time.replace(tzinfo=timezone.utc)
                     if cat.market_start_time.tzinfo is None else cat.market_start_time,
                 runners=[RunnerInfo(r.selection_id, r.runner_name) for r in cat.runners],
+                market_type=mtype,
             ))
         self._catalogue_cache = markets
         self._catalogue_fetched_at = now
-        log.info("betfair catalogue refreshed: %d WIN markets", len(markets))
+        log.info("betfair catalogue refreshed: %d WIN/PLACE markets", len(markets))
         return markets
+
+    # Backwards-compatible alias (pre-place-support name).
+    todays_win_markets = todays_markets
 
     def price_for(self, market_id: str, selection_id: int) -> PriceInfo | None:
         self._ensure_login()

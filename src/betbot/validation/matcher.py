@@ -46,19 +46,28 @@ def _tip_start_utc(race_time: str, reference: datetime) -> datetime | None:
 
 
 def match_tip(course: str, race_time: str, horse_name: str,
-              markets: list[MarketInfo], now: datetime) -> MatchResult:
+              markets: list[MarketInfo], now: datetime,
+              bet_market: str = "WIN") -> MatchResult:
     cfg = tunables().matching
 
     tip_start = _tip_start_utc(race_time, now)
     if tip_start is None:
         return MatchResult(ok=False, reason=f"unparseable race time '{race_time}'")
+    # A tip time well in the past means the tip is for tomorrow's card (tips are
+    # never for races already run — those parse as results, not tips).
+    if tip_start < now - timedelta(minutes=30):
+        tip_start += timedelta(days=1)
 
     window = timedelta(minutes=cfg.race_time_window_minutes)
     course_norm = course.strip().lower()
 
-    # Candidate races: venue fuzzy-matches the course AND start time inside the window.
+    # Candidate races: venue fuzzy-matches the course AND start time inside the
+    # window AND the market type matches the bet (WIN vs PLACE are separate
+    # Betfair markets for the same race).
     races: list[tuple[float, MarketInfo]] = []
     for m in markets:
+        if m.market_type != bet_market:
+            continue
         venue_score = fuzz.token_set_ratio(course_norm, m.venue.lower())
         if venue_score < 80:
             continue
@@ -68,7 +77,7 @@ def match_tip(course: str, race_time: str, horse_name: str,
     if not races:
         near = sorted({m.venue for m in markets
                        if fuzz.token_set_ratio(course_norm, m.venue.lower()) >= 80})
-        return MatchResult(ok=False, reason="no race found for course/time",
+        return MatchResult(ok=False, reason=f"no race found for course/time ({bet_market} market)",
                            candidates=[f"{v} (course matched, no race at {race_time})" for v in near] or None)
 
     races.sort(key=lambda t: (-t[0], abs(t[1].market_start_time - tip_start)))
