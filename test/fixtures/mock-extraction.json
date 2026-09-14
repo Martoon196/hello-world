@@ -1,0 +1,70 @@
+{
+  "headline": "3-bed mid-terrace BRR, Bolton BL3, £95k",
+  "summary": "A three-bedroom mid-terrace in Bolton BL3 offered at £95,000 against a claimed current value of £120,000. The sourcer proposes a light-to-medium refurb of £15,000 (kitchen, bathroom, decoration) with a post-works value of £145,000 and an achievable rent of £850 per month. The vendor is described as a landlord exiting the market and wanting a quick sale. No comparables, photos or survey were included.",
+  "strategy": "brr",
+  "strategy_rationale": "Pitched on the basis of buying below value, refurbishing and refinancing to pull most of the cash back out.",
+  "property": {
+    "address": "12 Example Street, Bolton",
+    "postcode": "BL3 4XX",
+    "town": "Bolton",
+    "property_type": "mid-terraced house",
+    "bedrooms": 3,
+    "bathrooms": 1,
+    "tenure": "freehold",
+    "lease_years_remaining": null,
+    "epc_rating": "D",
+    "floor_area_sqm": null,
+    "condition": "Dated but habitable; needs new kitchen, bathroom and full redecoration according to the sourcer.",
+    "current_occupancy": "Vacant"
+  },
+  "financials": {
+    "asking_price": 99950,
+    "purchase_price": 95000,
+    "estimated_market_value": 120000,
+    "refurb_cost": 15000,
+    "other_purchase_costs": null,
+    "sourcing_fee": 3000,
+    "end_value": 145000,
+    "monthly_rent": 850,
+    "number_of_lettable_units": null,
+    "monthly_service_charge_and_ground_rent": null,
+    "exit_strategy": "Refinance onto a BTL mortgage at 75% LTV and hold",
+    "comparables_provided": false
+  },
+  "source": {
+    "name": "Sample Sourcer",
+    "company": "Northern Deals Ltd",
+    "contact": "07700 900000",
+    "deadline_or_urgency": "Vendor wants exchange within 28 days"
+  },
+  "qualitative": {
+    "location_demand": 7,
+    "condition_risk": 5,
+    "vendor_motivation": 8,
+    "exit_liquidity": 6,
+    "planning_risk": 1,
+    "info_completeness": 4,
+    "numbers_credibility": 6,
+    "notes": "BL3 has solid rental demand for family lets. The £145k end value is a 21% uplift on a £15k refurb, which is optimistic without comparables. Refurb budget looks thin if the electrics or roof need attention. No survey, photos or floor plan were provided."
+  },
+  "red_flags": [
+    "Post-works value of £145,000 is not supported by any comparables.",
+    "£15,000 refurb budget for kitchen, bathroom and full redecoration leaves no contingency.",
+    "28-day exchange deadline pressures due diligence."
+  ],
+  "missing_information": [
+    "Sold comparables for the street or immediate area",
+    "Photos, floor plan and EPC certificate",
+    "Itemised refurb quote from a builder",
+    "Confirmation of vacant possession and any tenancy history",
+    "Council tax band and any Article 4 or selective licensing in BL3"
+  ],
+  "questions_for_sourcer": [
+    "Which sold comparables support the £145k post-works valuation?",
+    "Is the £15k refurb figure from a builder's quote or an estimate, and what does it include?",
+    "Has the property been surveyed, and is there any history of damp or roof issues?",
+    "Is the £3k sourcing fee payable on exchange or completion, and is it refundable if the deal falls through?",
+    "Can you share the full address so I can run my own checks?"
+  ],
+  "verdict": "On the sourcer's numbers this is a reasonable BRR that would leave under 20% of the cash in after refinance with a gross yield above 10%. The deal stands or falls on the £145k end value, which is unsupported. Worth a same-day request for comparables and a builder's quote before spending anything on a survey."
+}

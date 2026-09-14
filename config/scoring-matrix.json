@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "notes": "Edit weights, curves and assumptions here. Weights are per strategy and are renormalised over the metrics that have data. Curves are [value, points] pairs, interpolated linearly and clamped at the ends.",
+  "assumptions": {
+    "ltv": 0.75,
+    "interest_rate": 0.055,
+    "purchase_costs_pct": 0.04,
+    "selling_costs_pct": 0.02,
+    "opex_pct": { "default": 0.2, "hmo": 0.3, "commercial": 0.15 }
+  },
+  "ratings": [
+    { "min": 75, "rating": "green", "label": "Pursue" },
+    { "min": 55, "rating": "amber", "label": "Investigate" },
+    { "min": 0, "rating": "red", "label": "Pass" }
+  ],
+  "metrics": {
+    "gross_yield": {
+      "label": "Gross yield",
+      "unit": "%",
+      "source": "derived",
+      "curve": [[3, 0], [5, 30], [7, 65], [9, 90], [12, 100]]
+    },
+    "roce": {
+      "label": "Return on cash employed",
+      "unit": "%",
+      "source": "derived",
+      "curve": [[0, 0], [5, 30], [10, 60], [15, 85], [25, 100]]
+    },
+    "discount_to_mv": {
+      "label": "Discount to market value",
+      "unit": "%",
+      "source": "derived",
+      "curve": [[-10, 0], [0, 10], [10, 50], [20, 85], [30, 100]]
+    },
+    "profit_on_cost": {
+      "label": "Profit on cost",
+      "unit": "%",
+      "source": "derived",
+      "curve": [[0, 0], [10, 30], [20, 70], [25, 90], [35, 100]]
+    },
+    "money_left_in_pct": {
+      "label": "Money left in after refinance",
+      "unit": "% of cash in",
+      "source": "derived",
+      "curve": [[0, 100], [25, 80], [50, 50], [100, 10]]
+    },
+    "location_demand": { "label": "Location demand", "source": "qualitative", "direction": "higher" },
+    "condition_risk": { "label": "Condition risk", "source": "qualitative", "direction": "lower" },
+    "vendor_motivation": { "label": "Vendor motivation", "source": "qualitative", "direction": "higher" },
+    "exit_liquidity": { "label": "Exit liquidity", "source": "qualitative", "direction": "higher" },
+    "planning_risk": { "label": "Planning / licensing risk", "source": "qualitative", "direction": "lower" },
+    "info_completeness": { "label": "Deal sheet completeness", "source": "qualitative", "direction": "higher" },
+    "numbers_credibility": { "label": "Credibility of the numbers", "source": "qualitative", "direction": "higher" }
+  },
+  "strategies": {
+    "btl": {
+      "gross_yield": 20, "roce": 20, "discount_to_mv": 15, "location_demand": 15,
+      "condition_risk": 10, "exit_liquidity": 5, "info_completeness": 5, "numbers_credibility": 10
+    },
+    "hmo": {
+      "gross_yield": 20, "roce": 20, "discount_to_mv": 10, "location_demand": 15,
+      "planning_risk": 10, "condition_risk": 10, "info_completeness": 5, "numbers_credibility": 10
+    },
+    "flip": {
+      "profit_on_cost": 35, "discount_to_mv": 15, "condition_risk": 10, "exit_liquidity": 15,
+      "location_demand": 10, "info_completeness": 5, "numbers_credibility": 10
+    },
+    "brr": {
+      "money_left_in_pct": 25, "roce": 15, "discount_to_mv": 15, "gross_yield": 15,
+      "condition_risk": 10, "location_demand": 5, "info_completeness": 5, "numbers_credibility": 10
+    },
+    "development": {
+      "profit_on_cost": 35, "planning_risk": 20, "exit_liquidity": 15, "location_demand": 10,
+      "discount_to_mv": 5, "info_completeness": 5, "numbers_credibility": 10
+    },
+    "commercial": {
+      "gross_yield": 25, "roce": 15, "discount_to_mv": 15, "location_demand": 15,
+      "exit_liquidity": 10, "planning_risk": 5, "info_completeness": 5, "numbers_credibility": 10
+    },
+    "rent_to_rent": {
+      "roce": 30, "gross_yield": 15, "location_demand": 20, "planning_risk": 10,
+      "condition_risk": 5, "info_completeness": 10, "numbers_credibility": 10
+    },
+    "other": {
+      "discount_to_mv": 25, "gross_yield": 15, "roce": 15, "location_demand": 15,
+      "condition_risk": 10, "exit_liquidity": 5, "info_completeness": 5, "numbers_credibility": 10
+    }
+  }
+}

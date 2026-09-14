@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Send us a deal | Prop Invest UK</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1><span class="brand">Prop Invest UK</span> &middot; Send us a deal</h1>
+  <nav><a href="dashboard.html">Dashboard</a></nav>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <h2>Drop your deal sheet here</h2>
+    <p class="lead">Paste the details you'd normally send by WhatsApp or email, attach any PDFs, photos or screenshots, and we'll come back to you.</p>
+
+    <form id="form">
+      <label for="name">Your name</label>
+      <input type="text" id="name" name="name" autocomplete="name" required>
+
+      <label for="contact">Phone or email</label>
+      <input type="text" id="contact" name="contact" autocomplete="email" required>
+
+      <label for="headline">Deal in one line <span class="opt">(optional)</span></label>
+      <input type="text" id="headline" name="headline" placeholder="e.g. 3-bed terrace, Bolton, £95k, needs light refurb">
+
+      <label for="notes">Deal details</label>
+      <textarea id="notes" name="notes" placeholder="Address or area, asking / agreed price, current value, refurb needed and cost, expected rent or end value, tenure, vendor situation, your fee, any comparables..."></textarea>
+
+      <label>Attachments <span class="opt" id="accepted"></span></label>
+      <div class="drop" id="drop">
+        <input type="file" id="fileInput" multiple accept=".pdf,image/*,.txt,.csv,.md">
+        <div>Drag files here or <u>click to choose</u></div>
+        <div class="small">Up to 8 files, 20 MB each</div>
+      </div>
+      <ul class="files" id="fileList"></ul>
+
+      <input type="hidden" name="token" id="token">
+      <button class="primary" type="submit" id="submit">Send deal</button>
+      <div id="msg"></div>
+    </form>
+  </div>
+  <p class="small muted">Sending a deal does not commit either party to anything. We only use what you send to assess the opportunity.</p>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

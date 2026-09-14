@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deal dashboard | Prop Invest UK</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1><span class="brand">Prop Invest UK</span> &middot; Deal dashboard</h1>
+  <nav><a href="index.html">Submission form</a><a href="#" id="refresh">Refresh</a></nav>
+</header>
+
+<div class="wrap wide">
+  <div class="layout">
+    <aside>
+      <div class="tabs" id="filters">
+        <button data-f="all" class="on">All</button>
+        <button data-f="new">New</button>
+        <button data-f="shortlisted">Shortlisted</button>
+        <button data-f="offered">Offered</button>
+        <button data-f="rejected">Rejected</button>
+      </div>
+      <div class="list" id="list"><div class="empty">Loading...</div></div>
+    </aside>
+    <main id="detail">
+      <div class="card"><div class="empty">Pick a deal on the left, or send one in from the <a href="index.html">form</a>.</div></div>
+    </main>
+  </div>
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
