@@ -11,7 +11,12 @@
       "type": "single",
       "badge": "Free · 6 per week",
       "for": "Any age 4+. Nervous beginners welcome.",
-      "includes": ["20 minutes 1:1 in the water", "5 minute chat with you on poolside", "Written level assessment (Splash / Stroke / Sprint)", "Ruby's recommendation for next steps"]
+      "includes": [
+        "20 minutes 1:1 in the water",
+        "5 minute chat with you on poolside",
+        "Written level assessment (Splash / Stroke / Sprint)",
+        "Ruby's recommendation for next steps"
+      ]
     },
     {
       "id": "private-1",
@@ -22,7 +27,10 @@
       "lessons": 1,
       "type": "single",
       "for": "Try one lesson, or top up a block.",
-      "includes": ["30 minutes 1:1", "Progress note after the lesson"]
+      "includes": [
+        "30 minutes 1:1",
+        "Progress note after the lesson"
+      ]
     },
     {
       "id": "private-6",
@@ -35,7 +43,13 @@
       "type": "block",
       "badge": "Most popular",
       "for": "Children 4–14 who want steady, visible progress.",
-      "includes": ["6 × 30 minute 1:1 lessons, same day and time each week", "Written level assessment", "Progress note at week 4 and week 6", "Your slot held for renewal", "First-lesson promise: not happy after lesson one, we refund the rest"]
+      "includes": [
+        "6 × 30 minute 1:1 lessons, same day and time each week",
+        "Written level assessment",
+        "Progress note at week 4 and week 6",
+        "Your slot held for renewal",
+        "First-lesson promise: not happy after lesson one, we refund the rest"
+      ]
     },
     {
       "id": "private-12",
@@ -48,7 +62,11 @@
       "type": "block",
       "badge": "Best value",
       "for": "Families who want the whole term sorted.",
-      "includes": ["12 × 30 minute 1:1 lessons", "Everything in the block of 6", "End-of-term progress report and certificate"]
+      "includes": [
+        "12 × 30 minute 1:1 lessons",
+        "Everything in the block of 6",
+        "End-of-term progress report and certificate"
+      ]
     },
     {
       "id": "semi-6",
@@ -61,7 +79,46 @@
       "type": "block",
       "swimmers": 2,
       "for": "Siblings or friends within one level of each other.",
-      "includes": ["6 × 30 minute lessons for two swimmers", "£22.50 per swimmer per lesson", "Assessment and progress notes for both"]
+      "includes": [
+        "6 × 30 minute lessons for two swimmers",
+        "£22.50 per swimmer per lesson",
+        "Assessment and progress notes for both"
+      ]
+    },
+    {
+      "id": "home-1",
+      "name": "Lessons at Your Pool · single",
+      "short": "Ruby comes to your own pool. 30 minutes 1:1, within 20 minutes of Sevenoaks.",
+      "price": 6000,
+      "duration": 30,
+      "lessons": 1,
+      "type": "single",
+      "badge": "At your pool",
+      "for": "Families with a home pool in Sevenoaks, the Weald or surrounding villages.",
+      "includes": [
+        "30 minutes 1:1 at your pool",
+        "No lane, no changing rooms, no other swimmers",
+        "Pool safety check on the first visit",
+        "Progress note after the lesson"
+      ]
+    },
+    {
+      "id": "home-6",
+      "name": "Lessons at Your Pool · Block of 6",
+      "short": "Six weekly 30 minute lessons at your own pool. Siblings can share the slot.",
+      "price": 33000,
+      "compare": 36000,
+      "duration": 30,
+      "lessons": 6,
+      "type": "block",
+      "badge": "At your pool",
+      "for": "Home-pool families who want the whole block sorted. Two siblings can share the 30 minutes at no extra cost.",
+      "includes": [
+        "6 × 30 minute lessons at your pool, same slot weekly",
+        "Up to two siblings in the slot",
+        "Written assessment and progress notes",
+        "First-lesson promise"
+      ]
     },
     {
       "id": "programme-splash",
@@ -73,7 +130,12 @@
       "type": "programme",
       "level": "Splash",
       "for": "Ages 4–6. Face in the water, floating, first strokes.",
-      "includes": ["8 × 45 minute sessions, max 4 swimmers", "Initial assessment and milestones", "Parent progress update at week 4 and week 8", "Completion certificate and next-level recommendation"]
+      "includes": [
+        "8 × 45 minute sessions, max 4 swimmers",
+        "Initial assessment and milestones",
+        "Parent progress update at week 4 and week 8",
+        "Completion certificate and next-level recommendation"
+      ]
     },
     {
       "id": "programme-stroke",
@@ -85,7 +147,12 @@
       "type": "programme",
       "level": "Stroke",
       "for": "Ages 6–10. Front crawl, backstroke, breaststroke technique, 25m+ with confidence.",
-      "includes": ["8 × 45 minute sessions, max 4 swimmers", "Stroke-by-stroke milestones", "Parent progress update at week 4 and week 8", "Completion certificate and next-level recommendation"]
+      "includes": [
+        "8 × 45 minute sessions, max 4 swimmers",
+        "Stroke-by-stroke milestones",
+        "Parent progress update at week 4 and week 8",
+        "Completion certificate and next-level recommendation"
+      ]
     },
     {
       "id": "programme-sprint",
@@ -97,7 +164,12 @@
       "type": "programme",
       "level": "Sprint",
       "for": "Ages 9–14 aiming for a club, or already in one and wanting an edge.",
-      "includes": ["8 × 45 minute sessions, max 4 swimmers", "All four strokes, starts, turns, pacing", "Club-readiness report for parents", "Certificate and Ruby's honest recommendation"]
+      "includes": [
+        "8 × 45 minute sessions, max 4 swimmers",
+        "All four strokes, starts, turns, pacing",
+        "Club-readiness report for parents",
+        "Certificate and Ruby's honest recommendation"
+      ]
     },
     {
       "id": "intensive-5",
@@ -109,7 +181,11 @@
       "type": "intensive",
       "badge": "School holidays",
       "for": "Any level. Especially good for nervous swimmers and school-swimming deadlines.",
-      "includes": ["5 × 30 minute 1:1 lessons, Monday to Friday", "Assessment on day one", "Progress note and next steps on day five"]
+      "includes": [
+        "5 × 30 minute 1:1 lessons, Monday to Friday",
+        "Assessment on day one",
+        "Progress note and next steps on day five"
+      ]
     },
     {
       "id": "clinic-60",
@@ -121,7 +197,11 @@
       "type": "single",
       "badge": "Club swimmers",
       "for": "Club swimmers 9+ who want a technique edge from someone who races.",
-      "includes": ["60 minute 1:1", "Above and underwater video", "Written drill plan to take back to club"]
+      "includes": [
+        "60 minute 1:1",
+        "Above and underwater video",
+        "Written drill plan to take back to club"
+      ]
     }
   ]
 }

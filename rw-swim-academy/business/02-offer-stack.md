@@ -32,7 +32,7 @@
 | The must-have | Warmth plus visible, written progress | Technical credibility plus a plan they can take back to club | Price per swimmer |
 | The objection we must kill first | "What if my child doesn't take to her?" | "Is an 18-year-old really qualified to coach my club swimmer?" | "Will two get less than one?" |
 
-The confidence parent buys on **trust and proof of progress**. The club-track parent buys on **credibility and technical specificity**. The whole ladder is built to earn trust cheaply first, then prove progress in writing.
+The confidence parent buys on **trust and proof of progress**. The club-track parent buys on **credibility and technical specificity**. The whole ladder is built to earn trust at low cost first, then prove progress in writing.
 
 ---
 
@@ -61,7 +61,7 @@ The confidence parent buys on **trust and proof of progress**. The club-track pa
 - **Headline option:** "Find out where your child really is in the water. Free, in 20 minutes."
 - **Who it is for:** Any child aged 4 to 14 whose parent is undecided. Especially confidence parents burnt by group lessons.
 - **What is included:** 20 min 1:1 in the water; 5 min parent conversation; written level assessment (Splash / Stroke / Sprint sheet from `06`); a recommendation of one specific next offer; a founding-member place held for 48 hours if available.
-- **Price and logic:** £0. The cost to us is one lane slot (about £12 to £18 at £25 to £45/hr **[CONFIRM]**). If half of tasters convert to a £195 block, cost per acquired swimmer is about £35, which is cheap. The cap of 6 a week protects paid slots and keeps the offer scarce in a way that is true.
+- **Price and logic:** £0. The cost to us is one lane slot (about £12 to £18 at £25 to £45/hr **[CONFIRM]**). If half of tasters convert to a £195 block, cost per acquired swimmer is about £35, which is low. The cap of 6 a week protects paid slots and keeps the offer scarce in a way that is true.
 - **Risk reversal:** It is free, and the child's assessment is theirs to keep. The risk is on us.
 - **Upsell path:** Ruby recommends one thing, in writing, on the sheet: "Recommended: 1:1 block of 6, Tuesdays 4.30" or "Recommended: Splash Programme, January intake". Chris follows up within 24 hours with the Stripe link. Not a menu; one recommendation.
 - **The objection it kills:** "What if my child doesn't take to her, and I've paid £195?"
@@ -162,7 +162,7 @@ The confidence parent buys on **trust and proof of progress**. The club-track pa
 - **Headline option:** "Thirty places. Then it's the waiting list."
 - **Who it is for:** Everyone who books before the 30th swimmer.
 - **What is included:** 10% off the first block **[CONFIRM: the brief says "10% off first block for life", which reads two ways. This pack models the generous reading, 10% off every block for life, as the conservative case for the numbers. Chris to confirm which is meant; the wording on the website must match]**; free RW swim cap (about £6 each); priority booking window each term (48 hours before general release).
-- **Price and logic:** The discount costs about £3.25 per 1:1 lesson on the block rate. On 30 swimmers that is roughly £1,000 a year if all stay, which is cheap for a guaranteed first cohort and for the urgency of a real, visible countdown ("22 of 30 places taken").
+- **Price and logic:** The discount costs about £3.25 per 1:1 lesson on the block rate. On 30 swimmers that is roughly £1,000 a year if all stay, which is a small price for a guaranteed first cohort and for the urgency of a real, visible countdown ("22 of 30 places taken").
 - **Risk reversal:** Same guarantee as the underlying offer.
 - **Upsell path:** Founding Members are the referral engine (section 6) and the first to be offered Programmes and Intensives.
 - **The objection it kills:** "Why now, rather than next term when you've got reviews?"
@@ -277,7 +277,7 @@ The rule for Ruby on poolside after a taster: recommend **one** next step and wr
 | Audience specificity | 5 | Three clearly drawn parent types with the offer they land on; Sevenoaks and the villages named; ages named |
 | Value clarity | 4 | Small numbers plus written progress is easy to grasp. The Programme's "product" framing needs the milestone maps to exist (RW Method, `01` section 6) or it is just a small group |
 | Mechanism (why this works when the alternative did not) | 4 | Four or fewer swimmers, assessment on file, week 4 and week 8 notes, a coach who has raced. The mechanism is credible. It would be a 5 with a named framework on the website ("the RW Method: assess, milestone, report") |
-| Risk reversal fit | 5 | The first-lesson refund kills the exact fear a confidence parent has. It is cheap to honour (one lane slot) and believable because it is specific |
+| Risk reversal fit | 5 | The first-lesson refund kills the exact fear a confidence parent has. It costs little to honour (one lane slot) and believable because it is specific |
 | Price relative to outcome | 4 | £32.50 a lesson against "she can finally swim" is small. The Stroke Clinic at £55 is under-priced for its credibility and thin on margin in a hired lane; leave it for launch, review with the format option above |
 | Urgency, legitimately | 5 | Founding 30 is a real cap; 6 tasters a week is a real cap; Programmes have real start dates; Intensives have real pool time limits. No manufactured countdowns |
 | Ecosystem fit and bridges | 4 | Every offer leads somewhere. The weak bridge is Intensive to term block (holiday customers often disappear); the day-5 slot offer addresses it. Adults and triathletes are priced but have no bridge yet, which is fine for launch |

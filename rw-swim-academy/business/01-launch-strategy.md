@@ -302,7 +302,7 @@ There is a genuine community story: children in the district who never learn to 
 - A CIC or charity partnership needs its own governance, accounts and (for grants) a track record. That is Chris's admin time, which is the scarcest resource in Stage 1.
 - The business needs to prove it can pay for itself before it gives anything away.
 
-**What you can do now, cheaply and honestly:** offer 2 free taster places a term to a local primary school for children the school nominates; state it plainly on the website ("Every term, two free places for children a local school tells us need them"). It costs two lane slots.
+**What you can do now, at little cost and honestly:** offer 2 free taster places a term to a local primary school for children the school nominates; state it plainly on the website ("Every term, two free places for children a local school tells us need them"). It costs two lane slots.
 
 **When to revisit:** Stage 3, or earlier if one of these appears: a school or council asking for a school-swimming top-up programme; a grant (Sport England, Swim England, a district council community fund, a local trust) that needs a not-for-profit vehicle; a sponsor who wants a community programme to attach a name to. At that point the structure is usually **RW Swim Academy Ltd (trading) plus a separate RW Swim Foundation CIC (community)**, with the Ltd donating coach hours at cost.
 
