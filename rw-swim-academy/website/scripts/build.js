@@ -8,6 +8,7 @@ const SRC = path.join(ROOT, "src");
 const OUT = path.join(ROOT, "public");
 const SITE_URL = process.env.SITE_URL || "https://rwswimacademy.co.uk";
 
+const niceDate = (d) => d ? new Date(d + "T12:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "";
 const partial = (name) => fs.readFileSync(path.join(SRC, "partials", name + ".html"), "utf8");
 const head = partial("head"), header = partial("header"), footer = partial("footer"), sticky = partial("sticky-cta");
 
@@ -67,7 +68,7 @@ if (marked && fs.existsSync(blogDir)) {
     const html = marked.parse(body);
     posts.push({ ...meta, slug });
     const article = `
-<section class="page-hero"><div class="wrap"><span class="eyebrow">Blog</span><h1>${meta.title}</h1><p class="lead">${meta.description || ""}</p><p class="post-meta" style="color:rgba(255,255,255,.7)">${meta.date || ""} · by ${meta.author || "Ruby Waller"}</p></div></section>
+<section class="page-hero"><div class="wrap"><span class="eyebrow">Blog</span><h1>${meta.title}</h1><p class="lead">${meta.description || ""}</p><p class="post-meta" style="color:rgba(255,255,255,.7)">${niceDate(meta.date)} · by ${meta.author || "Ruby Waller"}</p></div></section>
 <section class="section"><div class="wrap"><article class="prose">${html}</article>
 <div class="banner" style="margin-top:48px"><div><h3>Book a free taster with Ruby</h3><p>20 minutes in the water, a written assessment, and an honest recommendation. No pressure.</p></div><a class="btn btn--gold btn--lg" href="/book.html?product=taster">Book a free taster</a></div>
 <p style="margin-top:24px"><a href="/blog/">&larr; All posts</a></p></div></section>`;
@@ -75,7 +76,7 @@ if (marked && fs.existsSync(blogDir)) {
   }
   // Blog index
   const list = posts.sort((a, b) => (b.date || "").localeCompare(a.date || "")).map((p) => `
-<article><span class="post-meta">${p.date || ""}</span><h3><a href="/blog/${p.slug}.html">${p.title}</a></h3><p class="muted">${p.description || ""}</p><a href="/blog/${p.slug}.html">Read more &rarr;</a></article>`).join("");
+<article><span class="post-meta">${niceDate(p.date)}</span><h3><a href="/blog/${p.slug}.html">${p.title}</a></h3><p class="muted">${p.description || ""}</p><a href="/blog/${p.slug}.html">Read more &rarr;</a></article>`).join("");
   const index = `
 <section class="page-hero"><div class="wrap"><span class="eyebrow">Blog</span><h1>Straight talk about learning to swim</h1><p class="lead">Practical advice for Kent parents from a coach who still races. No fluff.</p></div></section>
 <section class="section"><div class="wrap"><div class="post-list grid grid--2">${list || "<p>First posts coming soon.</p>"}</div></div></section>`;
