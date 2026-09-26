@@ -161,7 +161,7 @@ The confidence parent buys on **trust and proof of progress**. The club-track pa
 - **Hero summary:** The first 30 swimmers to book a block or programme become Founding Members: 10% off their blocks for as long as they keep swimming with us, a free RW swim cap, and first choice of slots every term before anyone else.
 - **Headline option:** "Thirty places. Then it's the waiting list."
 - **Who it is for:** Everyone who books before the 30th swimmer.
-- **What is included:** 10% off the first block **[CONFIRM: the brief says "10% off first block for life", which reads two ways. This pack models the generous reading, 10% off every block for life, as the conservative case for the numbers. Chris to confirm which is meant; the wording on the website must match]**; free RW swim cap (about £6 each); priority booking window each term (48 hours before general release).
+- **What is included:** 10% off every block they ever book, for life (confirmed: this is the generous reading and matches the website and BRIEF.md; the numbers in `03` already model it); free RW swim cap (about £6 each); priority booking window each term (48 hours before general release).
 - **Price and logic:** The discount costs about £3.25 per 1:1 lesson on the block rate. On 30 swimmers that is roughly £1,000 a year if all stay, which is a small price for a guaranteed first cohort and for the urgency of a real, visible countdown ("22 of 30 places taken").
 - **Risk reversal:** Same guarantee as the underlying offer.
 - **Upsell path:** Founding Members are the referral engine (section 6) and the first to be offered Programmes and Intensives.

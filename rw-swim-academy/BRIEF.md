@@ -52,7 +52,7 @@ All prices are launch prices for Sevenoaks in 2026 and assume Ruby is teaching i
 | 4 | **Holiday Intensive** | 5 consecutive days, 30 min 1:1 | **£160** (or £95 per swimmer in a group of 4 × 45 min) | Fast progress in school holidays. Sells out; great social content. |
 | 5 | **Stroke Clinic** (club swimmers) | 60 min 1:1, video analysis, take-home drill plan | **£55** | High-margin, uses Ruby's competitive credibility. Also sold as a 3-clinic pack £150. |
 | 5b | **Lessons at Your Pool** (home pools in the Weald) | 30 min 1:1 at the family's own pool, within 20 min of Sevenoaks | **£60 single · £330 block of 6** (£55); siblings share free | Highest-margin offer: zero lane hire, premium audience, no competition for pool time. Ruby drives; pool must pass a safety check. |
-| 6 | **Founding Members** (first 30 swimmers) | Any block/programme | 10% off first block for life + free RW swim cap + priority booking each term | Creates urgency and the first 30 paying customers. |
+| 6 | **Founding Members** (first 30 swimmers) | Any block/programme | 10% off every block they ever book (for life) + free RW swim cap + priority booking each term | Creates urgency and the first 30 paying customers. |
 
 **Guarantee / risk reversal:** *"If your child doesn't want to come back after the first lesson of a block, tell us and we'll refund the rest. No awkward conversation."*
 

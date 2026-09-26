@@ -24,7 +24,7 @@ Hook framework used: each post is labelled with its hook type (curiosity, contra
 
 Private 1:1 lessons and groups of no more than four. Ages 4 to 14. Taught by someone who still races.
 
-The first 30 swimmers become founding members: 10% off their first block for life, a free RW cap and priority booking every term. The list opens tomorrow at 8am. Follow along, I'll show you everything.
+The first 30 swimmers become founding members: 10% off every block for life, a free RW cap and priority booking every term. The list opens tomorrow at 8am. Follow along, I'll show you everything.
 **CTA:** Follow + "list opens tomorrow"
 **Hashtags:** #Sevenoaks #SevenoaksMums #KentMums #SwimmingLessons #LearnToSwim #SwimTeacher #CompetitiveSwimmer #KentSwimming #RWSwimAcademy #LearnFromASwimmer
 **Shot list:** dark car park with kit bag (phone, no flash); pool entry; underwater breaststroke from side (GoPro or phone in case); Ruby to camera poolside in RW hoodie **[hoodie needs ordering]**.
@@ -133,7 +133,7 @@ More of these every week. Lessons start in January.
 5. "RW Progress Programme. Groups of max 4, 8 weeks × 45 min. Splash (4 to 6), Stroke (6 to 10), Sprint (9 to 14). £160."
 6. "Holiday Intensive. 5 days in a row, 30 min 1:1. £160. Or £95 in a group of 4."
 7. "Stroke Clinic for club swimmers. 60 min, video analysis, drill plan. £55, or 3 for £150."
-8. "Founding members: 10% off your first block for life, free cap, priority booking. First 30 swimmers. Link in bio."
+8. "Founding members: 10% off every block for life, free cap, priority booking. First 30 swimmers. Link in bio."
 **Caption:** I'd rather you knew the numbers before you messaged. These are launch prices for Sevenoaks.
 
 If your child doesn't want to come back after the first lesson of a block, tell us and we'll refund the rest. No awkward conversation.
