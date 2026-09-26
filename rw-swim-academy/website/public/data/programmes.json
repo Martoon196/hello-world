@@ -1,0 +1,127 @@
+{
+  "currency": "gbp",
+  "products": [
+    {
+      "id": "taster",
+      "name": "Free Taster & Assessment",
+      "short": "20 min in the water with Ruby, plus a written level assessment.",
+      "price": 0,
+      "duration": 25,
+      "lessons": 1,
+      "type": "single",
+      "badge": "Free · 6 per week",
+      "for": "Any age 4+. Nervous beginners welcome.",
+      "includes": ["20 minutes 1:1 in the water", "5 minute chat with you on poolside", "Written level assessment (Splash / Stroke / Sprint)", "Ruby's recommendation for next steps"]
+    },
+    {
+      "id": "private-1",
+      "name": "Private 1:1 Lesson (single)",
+      "short": "One 30 minute lesson, just your child and Ruby.",
+      "price": 3500,
+      "duration": 30,
+      "lessons": 1,
+      "type": "single",
+      "for": "Try one lesson, or top up a block.",
+      "includes": ["30 minutes 1:1", "Progress note after the lesson"]
+    },
+    {
+      "id": "private-6",
+      "name": "Private 1:1 · Block of 6",
+      "short": "Six weekly 30 minute lessons in the same slot. Our most popular choice.",
+      "price": 19500,
+      "compare": 21000,
+      "duration": 30,
+      "lessons": 6,
+      "type": "block",
+      "badge": "Most popular",
+      "for": "Children 4–14 who want steady, visible progress.",
+      "includes": ["6 × 30 minute 1:1 lessons, same day and time each week", "Written level assessment", "Progress note at week 4 and week 6", "Your slot held for renewal", "First-lesson promise: not happy after lesson one, we refund the rest"]
+    },
+    {
+      "id": "private-12",
+      "name": "Private 1:1 · Block of 12",
+      "short": "Twelve weekly 30 minute lessons. A full term with Ruby.",
+      "price": 37200,
+      "compare": 42000,
+      "duration": 30,
+      "lessons": 12,
+      "type": "block",
+      "badge": "Best value",
+      "for": "Families who want the whole term sorted.",
+      "includes": ["12 × 30 minute 1:1 lessons", "Everything in the block of 6", "End-of-term progress report and certificate"]
+    },
+    {
+      "id": "semi-6",
+      "name": "Semi-Private 2:1 · Block of 6",
+      "short": "Two siblings or friends of a similar level share a 30 minute lesson.",
+      "price": 27000,
+      "compare": 30000,
+      "duration": 30,
+      "lessons": 6,
+      "type": "block",
+      "swimmers": 2,
+      "for": "Siblings or friends within one level of each other.",
+      "includes": ["6 × 30 minute lessons for two swimmers", "£22.50 per swimmer per lesson", "Assessment and progress notes for both"]
+    },
+    {
+      "id": "programme-splash",
+      "name": "RW Progress Programme · Splash",
+      "short": "8 weeks of water confidence for ages 4–6, in a group of no more than 4.",
+      "price": 16000,
+      "duration": 45,
+      "lessons": 8,
+      "type": "programme",
+      "level": "Splash",
+      "for": "Ages 4–6. Face in the water, floating, first strokes.",
+      "includes": ["8 × 45 minute sessions, max 4 swimmers", "Initial assessment and milestones", "Parent progress update at week 4 and week 8", "Completion certificate and next-level recommendation"]
+    },
+    {
+      "id": "programme-stroke",
+      "name": "RW Progress Programme · Stroke",
+      "short": "8 weeks of technique for ages 6–10, in a group of no more than 4.",
+      "price": 16000,
+      "duration": 45,
+      "lessons": 8,
+      "type": "programme",
+      "level": "Stroke",
+      "for": "Ages 6–10. Front crawl, backstroke, breaststroke technique, 25m+ with confidence.",
+      "includes": ["8 × 45 minute sessions, max 4 swimmers", "Stroke-by-stroke milestones", "Parent progress update at week 4 and week 8", "Completion certificate and next-level recommendation"]
+    },
+    {
+      "id": "programme-sprint",
+      "name": "RW Progress Programme · Sprint",
+      "short": "8 weeks of club-ready training for ages 9–14, in a group of no more than 4.",
+      "price": 16000,
+      "duration": 45,
+      "lessons": 8,
+      "type": "programme",
+      "level": "Sprint",
+      "for": "Ages 9–14 aiming for a club, or already in one and wanting an edge.",
+      "includes": ["8 × 45 minute sessions, max 4 swimmers", "All four strokes, starts, turns, pacing", "Club-readiness report for parents", "Certificate and Ruby's honest recommendation"]
+    },
+    {
+      "id": "intensive-5",
+      "name": "Holiday Intensive · 5 days 1:1",
+      "short": "Five consecutive days of 30 minute 1:1 lessons. Big progress, fast.",
+      "price": 16000,
+      "duration": 30,
+      "lessons": 5,
+      "type": "intensive",
+      "badge": "School holidays",
+      "for": "Any level. Especially good for nervous swimmers and school-swimming deadlines.",
+      "includes": ["5 × 30 minute 1:1 lessons, Monday to Friday", "Assessment on day one", "Progress note and next steps on day five"]
+    },
+    {
+      "id": "clinic-60",
+      "name": "Stroke Clinic · 60 min",
+      "short": "One hour, one stroke, video analysis and a take-home drill plan.",
+      "price": 5500,
+      "duration": 60,
+      "lessons": 1,
+      "type": "single",
+      "badge": "Club swimmers",
+      "for": "Club swimmers 9+ who want a technique edge from someone who races.",
+      "includes": ["60 minute 1:1", "Above and underwater video", "Written drill plan to take back to club"]
+    }
+  ]
+}

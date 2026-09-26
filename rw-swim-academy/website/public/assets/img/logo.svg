@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" role="img" aria-label="RW Swim Academy">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#12B5C9"/>
+      <stop offset="1" stop-color="#0B2545"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="58" fill="url(#g)"/>
+  <path d="M8 80c14-10 22-10 36 0s22 10 36 0 22-10 32 0" fill="none" stroke="#F4F9FB" stroke-opacity=".35" stroke-width="5" stroke-linecap="round"/>
+  <path d="M8 94c14-10 22-10 36 0s22 10 36 0 22-10 32 0" fill="none" stroke="#F4F9FB" stroke-opacity=".2" stroke-width="5" stroke-linecap="round"/>
+  <text x="60" y="66" text-anchor="middle" font-family="Sora, Arial, sans-serif" font-weight="800" font-size="44" fill="#FFFFFF" letter-spacing="-2">RW</text>
+  <circle cx="92" cy="30" r="7" fill="#F4B942"/>
+  <text x="140" y="58" font-family="Sora, Arial, sans-serif" font-weight="800" font-size="40" fill="#0B2545" letter-spacing="1">RW SWIM</text>
+  <text x="140" y="98" font-family="Sora, Arial, sans-serif" font-weight="600" font-size="30" fill="#12B5C9" letter-spacing="6">ACADEMY</text>
+</svg>

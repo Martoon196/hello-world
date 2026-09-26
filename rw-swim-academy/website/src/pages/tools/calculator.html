@@ -1,0 +1,50 @@
+---
+title: Session Profit Calculator (internal)
+description: Internal tool for RW Swim Academy: session and weekly unit economics.
+sticky: false
+scripts: /assets/js/calculator.js
+---
+<section class="page-hero"><div class="wrap"><span class="eyebrow">Internal tool · not linked from the site</span><h1>Session profit calculator</h1><p class="lead">Change the numbers, see what a session, a week and a year look like. Defaults match BRIEF.md and business/03-pricing-and-unit-economics.md.</p></div></section>
+<section class="section"><div class="wrap wizard">
+  <div class="card">
+    <h3>Assumptions</h3>
+    <div class="form">
+      <div class="form-row">
+        <div><label for="laneHire">Lane hire per hour (£)</label><input id="laneHire" type="number" value="35" step="1"></div>
+        <div><label for="insurance">Insurance + memberships per year (£)</label><input id="insurance" type="number" value="450" step="10"></div>
+      </div>
+      <div class="form-row">
+        <div><label for="admin">Software, website, email per month (£)</label><input id="admin" type="number" value="45" step="5"></div>
+        <div><label for="weeks">Teaching weeks per year</label><input id="weeks" type="number" value="40" step="1"></div>
+      </div>
+      <div class="form-row">
+        <div><label for="stripePct">Card fee %</label><input id="stripePct" type="number" value="1.5" step="0.1"></div>
+        <div><label for="stripeFix">Card fee fixed (p)</label><input id="stripeFix" type="number" value="20" step="1"></div>
+      </div>
+      <h3 style="margin-top:20px">Weekly mix (sessions per week)</h3>
+      <div class="form-row">
+        <div><label for="n11">Private 1:1 · 30 min · £32.50 (block rate)</label><input id="n11" type="number" value="10" step="1"></div>
+        <div><label for="n21">Semi-private 2:1 · 30 min · £45 (block rate)</label><input id="n21" type="number" value="2" step="1"></div>
+      </div>
+      <div class="form-row">
+        <div><label for="ngrp">Programme group · 45 min · 4 × £20</label><input id="ngrp" type="number" value="3" step="1"></div>
+        <div><label for="nclin">Stroke clinic · 60 min · £55</label><input id="nclin" type="number" value="1" step="1"></div>
+      </div>
+      <div class="form-row">
+        <div><label for="occ">Average occupancy of group places %</label><input id="occ" type="number" value="85" step="5"></div>
+        <div><label for="ntaster">Free tasters per week (cost only)</label><input id="ntaster" type="number" value="4" step="1"></div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="card summary">
+      <h3>Per session</h3>
+      <table class="table" id="perSession"></table>
+      <h3 style="margin-top:20px">Per week</h3>
+      <dl id="week"></dl>
+      <h3 style="margin-top:20px">Per year</h3>
+      <dl id="year"></dl>
+      <p class="small muted" style="margin-top:12px">Before tax. Ruby's own time isn't costed here: the "contribution" is what's left to pay her and build the business.</p>
+    </div>
+  </div>
+</div></section>
