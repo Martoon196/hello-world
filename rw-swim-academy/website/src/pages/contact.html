@@ -1,0 +1,77 @@
+---
+title: Contact & Founding Members Waiting List
+description: Contact RW Swim Academy in Sevenoaks or join the founding members waiting list for private swimming lessons with Ruby Waller.
+nav: contact
+---
+<section class="page-hero"><div class="wrap">
+  <span class="eyebrow">Contact</span>
+  <h1>Say hello, or grab a founding place</h1>
+  <p class="lead">We reply to every message within one working day. Usually much faster.</p>
+</div></section>
+
+<section class="section">
+  <div class="wrap wizard">
+    <div>
+      <div class="card" id="waitlist">
+        <span class="badge badge--gold">Founding members · first 30 swimmers</span>
+        <h2 style="margin-top:12px">Join the waiting list</h2>
+        <p class="muted">Lessons start January 2027. Founding members get 10% off every block for life, a free RW swim cap and first pick of slots. Tell us about your swimmer and we'll be in touch with taster dates before anyone else.</p>
+        <form class="form" name="waiting-list" method="POST" data-netlify="true" netlify-honeypot="company" action="/thanks/waitlist.html" data-success="You're on the list. Check your inbox for a note from Ruby.">
+          <input type="hidden" name="form-name" value="waiting-list">
+          <p class="hp"><label>Company <input name="company"></label></p>
+          <div class="form-row">
+            <div><label for="wl-name">Your name</label><input id="wl-name" name="parent_name" type="text" required autocomplete="name"></div>
+            <div><label for="wl-email">Email</label><input id="wl-email" name="email" type="email" required autocomplete="email"></div>
+          </div>
+          <div class="form-row">
+            <div><label for="wl-phone">Mobile <span class="opt">(for WhatsApp updates, optional)</span></label><input id="wl-phone" name="phone" type="tel" autocomplete="tel"></div>
+            <div><label for="wl-area">Where are you?</label><input id="wl-area" name="area" type="text" placeholder="e.g. Sevenoaks, Otford, Tonbridge"></div>
+          </div>
+          <div class="form-row">
+            <div><label for="wl-child">Child's first name and age</label><input id="wl-child" name="child" type="text" placeholder="e.g. Amelie, 6" required></div>
+            <div><label for="wl-level">Current ability</label>
+              <select id="wl-level" name="ability" required>
+                <option value="">Choose…</option>
+                <option>Won't put face in the water</option>
+                <option>Happy in water, can't swim yet</option>
+                <option>Can swim a width</option>
+                <option>Can swim 25m+</option>
+                <option>In a club or wants to join one</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div><label for="wl-type">Most interested in</label>
+              <select id="wl-type" name="interest">
+                <option>Private 1:1 lessons</option>
+                <option>8-week programme (small group)</option>
+                <option>Holiday intensive</option>
+                <option>Stroke clinic (club swimmer)</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <div><label for="wl-days">Days that work <span class="opt">(optional)</span></label><input id="wl-days" name="days" type="text" placeholder="e.g. Tue/Thu after school, Sat morning"></div>
+          </div>
+          <label class="check"><input type="checkbox" name="consent" value="yes" required> I'm happy for RW Swim Academy to email me about taster dates and lessons. Unsubscribe any time. <a href="/privacy.html">Privacy</a>.</label>
+          <button class="btn btn--primary btn--lg" type="submit" data-label="Join the waiting list">Join the waiting list</button>
+          <div class="form-status"></div>
+        </form>
+      </div>
+    </div>
+    <div>
+      <div class="card summary" id="message">
+        <h3>Ask a question</h3>
+        <form class="form" name="contact" method="POST" data-netlify="true" netlify-honeypot="company" action="/thanks/contact.html">
+          <input type="hidden" name="form-name" value="contact">
+          <p class="hp"><label>Company <input name="company"></label></p>
+          <div><label for="c-name">Name</label><input id="c-name" name="name" type="text" required></div>
+          <div><label for="c-email">Email</label><input id="c-email" name="email" type="email" required></div>
+          <div><label for="c-msg">Message</label><textarea id="c-msg" name="message" required></textarea></div>
+          <button class="btn btn--navy btn--block" type="submit" data-label="Send message">Send message</button>
+          <div class="form-status"></div>
+        </form>
+        <p class="small muted" style="margin-top:16px">Or email <a href="mailto:hello@rwswimacademy.co.uk">hello@rwswimacademy.co.uk</a><br>Instagram <a href="https://www.instagram.com/rwswimacademy">@rwswimacademy</a></p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,104 @@
+---
+title: Book a Lesson or Free Taster
+description: Book a free taster, private 1:1 block, 8-week programme, holiday intensive or stroke clinic with Ruby Waller in Sevenoaks. Pay securely online.
+nav: book
+sticky: false
+scripts: /assets/js/slots.js,/assets/js/booking.js
+---
+<section class="page-hero"><div class="wrap">
+  <span class="eyebrow">Book online</span>
+  <h1>Book with Ruby</h1>
+  <p class="lead">Choose a lesson, pick a time, tell us about your swimmer. Two minutes, and every lesson lands in your calendar.</p>
+</div></section>
+
+<section class="section">
+  <div class="wrap">
+    <ol class="wiz-steps" id="wiz-steps">
+      <li data-step="1" class="active">1 · Lesson</li>
+      <li data-step="2">2 · Time</li>
+      <li data-step="3">3 · Swimmer</li>
+      <li data-step="4">4 · Confirm</li>
+    </ol>
+    <div class="wizard">
+      <div>
+        <div id="booking-alert"></div>
+
+        <!-- Step 1: product -->
+        <div class="wiz-panel active" data-panel="1">
+          <h2>What would you like to book?</h2>
+          <p class="muted">Not sure? Start with the free taster and Ruby will recommend the right option.</p>
+          <div class="choice-grid" id="product-list"><p><span class="spinner"></span> Loading lessons…</p></div>
+          <div class="btn-row" style="margin-top:20px"><button class="btn btn--navy" id="to-step-2" disabled>Choose a time &rarr;</button></div>
+        </div>
+
+        <!-- Step 2: time -->
+        <div class="wiz-panel" data-panel="2">
+          <h2 id="time-heading">Pick a time</h2>
+          <p class="muted" id="time-help"></p>
+          <div id="time-picker"><p><span class="spinner"></span> Checking Ruby's calendar…</p></div>
+          <div class="btn-row" style="margin-top:20px"><button class="btn btn--ghost" data-back="1">&larr; Back</button><button class="btn btn--navy" id="to-step-3" disabled>Swimmer details &rarr;</button></div>
+        </div>
+
+        <!-- Step 3: details -->
+        <div class="wiz-panel" data-panel="3">
+          <h2>About your swimmer</h2>
+          <form class="form" id="details-form" novalidate>
+            <div class="form-row">
+              <div><label for="parent_name">Your name</label><input id="parent_name" name="parent_name" type="text" required autocomplete="name"></div>
+              <div><label for="email">Email <span class="opt">(confirmation and calendar invites go here)</span></label><input id="email" name="email" type="email" required autocomplete="email"></div>
+            </div>
+            <div class="form-row">
+              <div><label for="phone">Mobile</label><input id="phone" name="phone" type="tel" required autocomplete="tel"></div>
+              <div><label for="child_name">Child's first name</label><input id="child_name" name="child_name" type="text" required></div>
+            </div>
+            <div class="form-row">
+              <div><label for="child_age">Child's age</label><input id="child_age" name="child_age" type="number" min="3" max="99" required></div>
+              <div><label for="ability">Current ability</label>
+                <select id="ability" name="ability" required>
+                  <option value="">Choose…</option>
+                  <option>Won't put face in the water</option>
+                  <option>Happy in water, can't swim yet</option>
+                  <option>Can swim a width</option>
+                  <option>Can swim 25m+</option>
+                  <option>In a club or wants to join one</option>
+                </select>
+              </div>
+            </div>
+            <div id="second-swimmer" style="display:none" class="form-row">
+              <div><label for="child2_name">Second swimmer's first name</label><input id="child2_name" name="child2_name" type="text"></div>
+              <div><label for="child2_age">Second swimmer's age</label><input id="child2_age" name="child2_age" type="number" min="3" max="99"></div>
+            </div>
+            <div><label for="medical">Anything Ruby should know? <span class="opt">(medical conditions, additional needs, fears, what's worked before)</span></label><textarea id="medical" name="medical"></textarea></div>
+            <div><label for="promo">Founding member or discount code <span class="opt">(optional)</span></label><input id="promo" name="promo" type="text" placeholder="e.g. FOUNDER10"><p class="help">Codes are applied on the payment page.</p></div>
+            <label class="check"><input type="checkbox" name="photo_consent" value="yes"> I'm happy for photos or short video of my child to be used on RW Swim Academy social media and website. No names, venues or times are ever shown. I can withdraw this at any time.</label>
+            <label class="check"><input type="checkbox" name="terms" value="yes" required> I agree to the <a href="/terms.html" target="_blank">terms and conditions</a>, including the 24-hour notice policy, and the <a href="/privacy.html" target="_blank">privacy notice</a>.</label>
+            <div class="btn-row" style="margin-top:8px"><button type="button" class="btn btn--ghost" data-back="2">&larr; Back</button><button class="btn btn--navy" type="submit">Review booking &rarr;</button></div>
+          </form>
+        </div>
+
+        <!-- Step 4: confirm -->
+        <div class="wiz-panel" data-panel="4">
+          <h2>Check and confirm</h2>
+          <div class="card" id="review"></div>
+          <div class="btn-row" style="margin-top:20px">
+            <button class="btn btn--ghost" data-back="3">&larr; Back</button>
+            <button class="btn btn--primary btn--lg" id="confirm-btn">Confirm</button>
+          </div>
+          <p class="form-note" style="margin-top:12px">Payments are handled by Stripe. We never see or store your card details.</p>
+        </div>
+      </div>
+
+      <aside class="card summary" aria-live="polite">
+        <h3>Your booking</h3>
+        <dl id="summary">
+          <dt>Lesson</dt><dd id="s-product">—</dd>
+          <dt>When</dt><dd id="s-when">—</dd>
+          <dt>Where</dt><dd id="s-where">Sevenoaks area, confirmed by email</dd>
+          <dt>Swimmer</dt><dd id="s-child">—</dd>
+        </dl>
+        <div class="total"><span class="muted">Total</span><span class="price" id="s-total">£0</span></div>
+        <p class="small muted" style="margin-top:12px">Founding members: 10% off is applied with your code on the payment page.</p>
+      </aside>
+    </div>
+  </div>
+</section>

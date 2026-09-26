@@ -1,0 +1,48 @@
+# Netlify configuration for RW Swim Academy
+# Deploy: connect this repo in Netlify, set "Base directory" to rw-swim-academy/website.
+[build]
+  command = "npm run build"
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Pretty URLs: /book -> /book.html
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Short links used in ads, flyers and social posts
+[[redirects]]
+  from = "/taster"
+  to = "/book.html?product=taster"
+  status = 301
+[[redirects]]
+  from = "/founding"
+  to = "/contact.html#waitlist"
+  status = 301
+[[redirects]]
+  from = "/intensive"
+  to = "/lessons.html#intensives"
+  status = 301
+[[redirects]]
+  from = "/stroke-clinic"
+  to = "/lessons.html#clinics"
+  status = 301
+[[redirects]]
+  from = "/home-pool"
+  to = "/lessons.html#home"
+  status = 301
+[[redirects]]
+  from = "/waitlist"
+  to = "/contact.html#waitlist"
+  status = 301

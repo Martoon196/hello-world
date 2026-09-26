@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://rwswimacademy.co.uk/sitemap.xml

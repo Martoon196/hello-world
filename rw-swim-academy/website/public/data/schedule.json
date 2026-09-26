@@ -1,0 +1,30 @@
+{
+  "_comment": "Ruby's teaching windows. Times are Europe/London. Slots are generated every `slotMinutes` inside each window, then Google Calendar busy times are removed. Edit this file to change availability; blockout dates go in the calendar.",
+  "timezone": "Europe/London",
+  "slotMinutes": 30,
+  "bookingLeadHours": 24,
+  "bookingHorizonDays": 42,
+  "windows": [
+    { "day": "mon", "start": "16:00", "end": "19:00" },
+    { "day": "tue", "start": "16:00", "end": "19:00" },
+    { "day": "wed", "start": "16:00", "end": "19:00" },
+    { "day": "thu", "start": "16:00", "end": "19:00" },
+    { "day": "fri", "start": "16:00", "end": "18:30" },
+    { "day": "sat", "start": "08:00", "end": "13:00" }
+  ],
+  "tasterWindows": [
+    { "day": "wed", "start": "18:00", "end": "19:00" },
+    { "day": "sat", "start": "12:00", "end": "13:00" }
+  ],
+  "programmeCohorts": [
+    { "productId": "programme-splash", "label": "Saturdays 9:00, starts 10 Jan 2027", "day": "sat", "time": "09:00", "start": "2027-01-10", "spaces": 4 },
+    { "productId": "programme-stroke", "label": "Saturdays 10:00, starts 10 Jan 2027", "day": "sat", "time": "10:00", "start": "2027-01-10", "spaces": 4 },
+    { "productId": "programme-stroke", "label": "Wednesdays 17:00, starts 7 Jan 2027", "day": "wed", "time": "17:00", "start": "2027-01-07", "spaces": 4 },
+    { "productId": "programme-sprint", "label": "Saturdays 11:00, starts 10 Jan 2027", "day": "sat", "time": "11:00", "start": "2027-01-10", "spaces": 4 }
+  ],
+  "intensiveWeeks": [
+    { "label": "February half term: Mon 15 – Fri 19 Feb 2027", "start": "2027-02-15", "times": ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30"] },
+    { "label": "Easter week 1: Mon 29 Mar – Fri 2 Apr 2027", "start": "2027-03-29", "times": ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30"] }
+  ],
+  "venue": "Sevenoaks & surrounding areas. Venue confirmed at booking."
+}
