@@ -32,7 +32,7 @@
 ### Ad set A: Problem-led ("stuck in a group of ten")
 
 **A1**
-- **Primary text:** Your child has had the same swimming badge for two terms. It's not them. It's ten children, one teacher and about three minutes of attention each.
+- **Primary text:** Same swimming badge for two terms? It's rarely the child. It's ten children, one teacher and about three minutes of attention each.
   RW Swim Academy is 1:1 and groups of four, in Sevenoaks, taught by Ruby: 18, qualified, and still racing at county level.
   Start with a free 20-minute taster and a written assessment. Six a week. No pressure on poolside.
 - **Headline:** Free Swim Taster in Sevenoaks
@@ -166,7 +166,7 @@ Pin headline 1 or 3 to position 1 so "Sevenoaks" or "Free Taster" always shows.
 
 **What a good CPL means for RW.** A taster converts to a block at 60% (target). A first block is worth £160 to £372, and a retained family renews several times. So a £20 taster lead is roughly a £12 to £15 cost per paying swimmer. Anything under £30 per taster is fine in Stage 1. Anything over £40 for two consecutive weeks: pause, and go back to groups and referrals.
 
-**Capacity check:** six tasters a week is the cap. If ads are filling all six with two days of spend, cut the budget rather than overbook. The point is full tasters, not cheap leads. **[CONFIRM the six-a-week cap holds during launch or whether Ruby will open more in January]**
+**Capacity check:** six tasters a week is the cap. If ads are filling all six with two days of spend, cut the budget rather than overbook. The point is full tasters, not the lowest possible cost per lead. **[CONFIRM the six-a-week cap holds during launch or whether Ruby will open more in January]**
 
 **What to measure weekly:** spend, taster bookings by ad set, cost per booking, taster attendance rate, taster-to-block conversion by source (ask "how did you hear about us?" on the form). Kill the worst ad in each set after 14 days, keep the best, write one new challenger.
 

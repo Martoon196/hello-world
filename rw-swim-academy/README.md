@@ -2,7 +2,7 @@
 
 Everything needed to take Ruby Waller's swim school from an idea in a WhatsApp group to a paying business in Sevenoaks: the strategy, the offers and pricing, the legal and operational checklist, a 90-day plan, a designed website with online booking, card payments and calendar sync, and a full marketing kit (social, email, blog, ads, local outreach, press).
 
-**Start here:** [`BRIEF.md`](BRIEF.md) — the one-page brand and offer bible everything else is built from. Then read [`business/01-launch-strategy.md`](business/01-launch-strategy.md).
+**Start here:** [`BRIEF.md`](BRIEF.md) — the one-page brand and offer bible everything else is built from. Then read [`business/00-straight-talk.md`](business/00-straight-talk.md) and [`business/01-launch-strategy.md`](business/01-launch-strategy.md).
 
 Anything marked **[CONFIRM]** anywhere in this folder is a placeholder or an unverified fact that Chris or Ruby must check before it goes public (qualification name, current club, venue, prices once lane hire is known).
 
@@ -15,6 +15,7 @@ Do not build a pool. Build demand. Ruby proves the offer herself in hired lanes 
 ### `business/` — strategy, numbers, legal, plan
 | File | What it gives you |
 |------|-------------------|
+| `00-straight-talk.md` | **Read first.** What to keep, bin or change from the group-chat advice, what it missed (pool access, home pools, pricing), the five numbers to watch, and this week's jobs. |
 | `01-launch-strategy.md` | The staged plan with numeric gates for each stage, Ruby-first-then-coaches, the RW Method, community/CIC kept separate, investor-readiness evidence, and the 10 decisions Chris needs to make this month. |
 | `02-offer-stack.md` | Every offer designed properly: free taster → 1:1 blocks → 8-week programmes → holiday intensives → stroke clinics → founding members, plus referral, siblings, vouchers, a 12-month offer calendar and the options where there's a real choice. |
 | `03-pricing-and-unit-economics.md` | Session-level profit for every lesson type, break-even occupancy, weekly/monthly/annual scenarios at 10/20/30 hours, sensitivity to lane hire, a worked first term, tax notes. Pairs with the online calculator in the website. |
@@ -44,3 +45,6 @@ See [`website/README.md`](website/README.md) for the afternoon-long "go live" gu
 
 ## Verified facts used (public sources)
 Ruby swims for Maidstone Swimming Club (previously Sevenoaks), was selected for the Kent County ASA Development Camp, has competed at the Kent County Championships and at national qualifier meets in 2025–26, and was a 2025 Inspirational Youth Awards finalist. Instagram: @rubywaller.swims. Nothing beyond this has been claimed about her results; add more once Chris confirms them.
+
+## Short links (set up in `website/netlify.toml`)
+`/taster` `/founding` `/waitlist` `/intensive` `/stroke-clinic` `/home-pool` all redirect to the right page, so flyers and ad copy can use them.

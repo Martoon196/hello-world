@@ -3,7 +3,7 @@
 All scripts are in Ruby's voice, filmed on a phone, one take where possible. Format for each: hook (first 2 seconds), beats with timings, on-screen text, CTA, caption. Hashtags: pick 8 to 10 from the sets in `01-social-strategy.md`.
 
 **Standing production notes**
-- Film vertical, 9:16. Phone at water level for in-water shots; a cheap waterproof case is enough.
+- Film vertical, 9:16. Phone at water level for in-water shots; an inexpensive waterproof case is enough.
 - Ruby wears the RW cap or hoodie in every to-camera shot so the brand is on screen without a logo bug.
 - No children in any script here. Ruby demonstrates. Consented swimmer footage belongs in the proof templates in `03-launch-week-posts.md`.
 - Subtitles on, always. Most parents watch on mute at pick-up.

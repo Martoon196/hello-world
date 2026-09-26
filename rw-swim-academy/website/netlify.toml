@@ -20,3 +20,29 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Short links used in ads, flyers and social posts
+[[redirects]]
+  from = "/taster"
+  to = "/book.html?product=taster"
+  status = 301
+[[redirects]]
+  from = "/founding"
+  to = "/contact.html#waitlist"
+  status = 301
+[[redirects]]
+  from = "/intensive"
+  to = "/lessons.html#intensives"
+  status = 301
+[[redirects]]
+  from = "/stroke-clinic"
+  to = "/lessons.html#clinics"
+  status = 301
+[[redirects]]
+  from = "/home-pool"
+  to = "/lessons.html#home"
+  status = 301
+[[redirects]]
+  from = "/waitlist"
+  to = "/contact.html#waitlist"
+  status = 301
