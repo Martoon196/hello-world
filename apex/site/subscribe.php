@@ -3,8 +3,10 @@
 // Secrets live in apex-config.php ONE LEVEL ABOVE public_html — never in here.
 //
 // Expects apex-config.php to define:
-//   NOTION_TOKEN        ntn_... / secret_...  (internal integration token)
-//   NOTION_DATABASE_ID  Paddock Signups database id
+//   NOTION_TOKEN           ntn_... / secret_...  (internal integration token)
+//   NOTION_DATABASE_ID     Paddock Signups database id
+//   PADDOCK_SHARED_SECRET  same value as PADDOCK_SHARED_SECRET in the members server's .env
+//                          (optional: without it, signups stay Notion-only)
 declare(strict_types=1);
 
 $config = dirname(__DIR__) . '/apex-config.php';
@@ -46,11 +48,34 @@ curl_exec($ch);
 $status = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 curl_close($ch);
 
+// The members server keeps the list, sends the welcome + guide + Sunday log, and
+// handles unsubscribes. If it can't be reached, fall back to a welcome from here.
+$forwarded = forward_to_members($email);
+
 if ($status >= 200 && $status < 300) {
-    send_welcome_email($email);
+    if (!$forwarded) { send_welcome_email($email); }
     header('Location: /thanks.html'); exit;
 }
+if ($forwarded) { header('Location: /thanks.html'); exit; }
 header('Location: /?signup=error#paddock');
+
+function forward_to_members(string $email): bool
+{
+    if (!defined('PADDOCK_SHARED_SECRET') || PADDOCK_SHARED_SECRET === '') { return false; }
+    $url = defined('MEMBERS_URL') ? MEMBERS_URL : 'https://members.apexcode.uk';
+    $ch = curl_init(rtrim($url, '/') . '/public/paddock');
+    curl_setopt_array($ch, [
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => http_build_query(['email' => $email, 'source' => 'website']),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 15,
+        CURLOPT_HTTPHEADER     => ['X-Apex-Key: ' . PADDOCK_SHARED_SECRET],
+    ]);
+    $body = curl_exec($ch);
+    $code = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    curl_close($ch);
+    return $code === 200 && is_string($body) && strpos($body, '"ok":true') !== false;
+}
 
 // Welcome email via SiteGround's local mail for this domain (no SMTP creds needed).
 // Failure is non-fatal: the signup is already captured in Notion.
@@ -62,9 +87,9 @@ You're in.
 
 The Paddock is the free tier of The Apex Code. Here's what lands in your inbox:
 
-- One free selection a week — the same quality that goes to members.
+- The Bank Builder guide: https://apexcode.uk/bank-builder.html
+- One free selection a week, with the full reasoning members get.
 - The full results log every Sunday. Every bet, wins and losses alike.
-  The log never loses a row.
 
 The live feed runs on Telegram: https://t.me/TheApexCodeUK
 

@@ -33,6 +33,7 @@ class Secrets(BaseSettings):
     dashboard_password: str | None = None
 
     stripe_webhook_secret: str | None = None
+    paddock_shared_secret: str | None = None
     smtp_host: str | None = None
     smtp_port: int = 587
     smtp_user: str | None = None
@@ -103,6 +104,7 @@ class NotificationsCfg(BaseModel):
 
 class ApexCfg(BaseModel):
     base_url: str = "http://localhost:8080"
+    site_url: str = "https://apexcode.uk"
     # Stripe price id -> {tier, period}; marketing repoints products here, no code.
     stripe_prices: dict[str, dict[str, str]] = {}
 

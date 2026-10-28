@@ -135,12 +135,12 @@ class MembersRepo:
 
     # ---- magic links & sessions ----
 
-    def create_magic_link(self, member_id: int) -> str:
+    def create_magic_link(self, member_id: int, ttl_minutes: int = MAGIC_LINK_TTL_MINUTES) -> str:
         token = pysecrets.token_urlsafe(32)
         self._r._exec(
             "INSERT INTO magic_links (token, member_id, expires_at, created_at) VALUES (?,?,?,?)",
             (token, member_id,
-             _ts(datetime.now(timezone.utc) + timedelta(minutes=MAGIC_LINK_TTL_MINUTES)), utcnow()))
+             _ts(datetime.now(timezone.utc) + timedelta(minutes=ttl_minutes)), utcnow()))
         return token
 
     def consume_magic_link(self, token: str) -> Optional[int]:
@@ -166,6 +166,90 @@ class MembersRepo:
 
     def delete_session(self, token: str) -> None:
         self._r._exec("DELETE FROM sessions WHERE token=?", (token,))
+
+    # ---- the Paddock (free email list) ----
+
+    def ensure_unsub_token(self, member_id: int) -> str:
+        row = self.get_member(member_id)
+        if row["unsub_token"]:
+            return row["unsub_token"]
+        token = pysecrets.token_urlsafe(24)
+        self._r._exec("UPDATE members SET unsub_token=? WHERE id=?", (token, member_id))
+        return token
+
+    def join_paddock(self, email: str, source: str | None = None) -> tuple[int, bool]:
+        """Record consent for the free list. Returns (member_id, send_welcome)."""
+        now = utcnow()
+        member = self.get_member_by_email(email)
+        if member is None:
+            member_id = self.create_member(email, tier="paddock", billing_period="free")
+            self._r._exec("UPDATE members SET consent_at=?, signup_source=? WHERE id=?",
+                          (now, source, member_id))
+            self.ensure_unsub_token(member_id)
+            return member_id, True
+        rejoining = member["unsubscribed_at"] is not None or member["consent_at"] is None
+        self._r._exec(
+            """UPDATE members SET consent_at=COALESCE(consent_at, ?), unsubscribed_at=NULL,
+                   signup_source=COALESCE(signup_source, ?), updated_at=? WHERE id=?""",
+            (now, source, now, member["id"]))
+        self.ensure_unsub_token(member["id"])
+        return member["id"], rejoining
+
+    def unsubscribe(self, token: str) -> Optional[sqlite3.Row]:
+        member = self._r._one("SELECT * FROM members WHERE unsub_token=?", (token,))
+        if member is not None and member["unsubscribed_at"] is None:
+            self._r._exec("UPDATE members SET unsubscribed_at=?, updated_at=? WHERE id=?",
+                          (utcnow(), utcnow(), member["id"]))
+        return member
+
+    def weekly_email_list(self) -> list[sqlite3.Row]:
+        """Everyone who gets the Sunday log: consenting Paddock + active paying members."""
+        return self._r._all(
+            """SELECT * FROM members WHERE unsubscribed_at IS NULL AND (
+                   (tier = 'paddock' AND consent_at IS NOT NULL)
+                   OR (tier != 'paddock' AND status IN ('active','trialing')))
+               ORDER BY id""")
+
+    def paddock_list(self) -> list[sqlite3.Row]:
+        return self._r._all(
+            """SELECT * FROM members WHERE tier='paddock' AND consent_at IS NOT NULL
+                   AND unsubscribed_at IS NULL ORDER BY id""")
+
+    # ---- paid-member lifecycle ----
+
+    def mark_welcomed(self, member_id: int) -> None:
+        self._r._exec("UPDATE members SET welcomed_at=? WHERE id=?", (utcnow(), member_id))
+
+    def mark_verdict_asked(self, member_id: int) -> None:
+        self._r._exec("UPDATE members SET verdict_asked_at=? WHERE id=?", (utcnow(), member_id))
+
+    def members_due_verdict(self, days: int = 30) -> list[sqlite3.Row]:
+        cutoff = _ts(datetime.now(timezone.utc) - timedelta(days=days))
+        return self._r._all(
+            """SELECT * FROM members WHERE tier != 'paddock' AND status IN ('active','trialing')
+                   AND verdict_asked_at IS NULL AND unsubscribed_at IS NULL
+                   AND created_at <= ? ORDER BY id""", (cutoff,))
+
+    # ---- Stripe events that arrive before their checkout ----
+
+    def stash_subscription_event(self, customer_id: str, *, price_id: str | None,
+                                 status: str, subscription_id: str | None) -> None:
+        self._r._exec(
+            """INSERT INTO pending_subscription_events
+                   (stripe_customer_id, price_id, status, stripe_subscription_id, received_at)
+               VALUES (?,?,?,?,?)
+               ON CONFLICT(stripe_customer_id) DO UPDATE SET price_id=excluded.price_id,
+                   status=excluded.status, stripe_subscription_id=excluded.stripe_subscription_id,
+                   received_at=excluded.received_at""",
+            (customer_id, price_id, status, subscription_id, utcnow()))
+
+    def pop_stashed_subscription(self, customer_id: str) -> Optional[sqlite3.Row]:
+        row = self._r._one("SELECT * FROM pending_subscription_events WHERE stripe_customer_id=?",
+                           (customer_id,))
+        if row is not None:
+            self._r._exec("DELETE FROM pending_subscription_events WHERE stripe_customer_id=?",
+                          (customer_id,))
+        return row
 
     # ---- member feed accounting ----
 

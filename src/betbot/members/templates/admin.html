@@ -1,7 +1,123 @@
 {% extends "base.html" %}
 {% block title %}Admin · The Apex Code{% endblock %}
 {% block content %}
-<h2>Tier features — the switchboard</h2>
+{% if msg %}<div class="card" style="border-color:var(--gold)">{{ msg }}</div>{% endif %}
+
+<p class="muted">Jump to: <a href="#funnel">Funnel</a> · <a href="#log">Official log</a> · <a href="#settings">Settings</a> ·
+<a href="#email">Email</a> · <a href="#founders">Founder Wall</a> · <a href="#switchboard">Switchboard</a> · <a href="#members">Members</a></p>
+
+<h2 id="funnel">Funnel</h2>
+<div class="card scroll">
+  <table>
+    <tr><th>Stage</th><th class="num">Last 7 days</th><th class="num">Last 30 days</th><th class="num">Now</th></tr>
+    <tr><td>Site visits (apexcode.uk page views)</td><td class="num mono">{{ funnel.views_7 }}</td><td class="num mono">{{ funnel.views_30 }}</td><td class="num muted">—</td></tr>
+    <tr><td>Paddock signups</td><td class="num mono">{{ funnel.paddock_7 }}</td><td class="num mono">{{ funnel.paddock_30 }}</td><td class="num mono">{{ funnel.paddock_total }} subscribed</td></tr>
+    <tr><td>Paying members (active)</td><td class="num muted">—</td><td class="num muted">—</td><td class="num mono">{{ funnel.paid_total }}</td></tr>
+    <tr><td>Unsubscribed</td><td class="num muted">—</td><td class="num muted">—</td><td class="num mono">{{ funnel.unsubscribed }}</td></tr>
+  </table>
+  {% if funnel.paid %}<p class="muted" style="margin-top:.6rem">Paying by plan:
+    {% for p in funnel.paid %}<span class="badge">{{ p['tier'] }} · {{ p['billing_period'] }} · {{ p['n'] }}</span> {% endfor %}</p>{% endif %}
+  {% if sources %}<p class="muted">Top sources, 30 days:
+    {% for src in sources %}<span class="badge">{{ src['source'] }} · {{ src['views'] }}</span> {% endfor %}</p>{% endif %}
+  <p class="muted">Counts start from the day this went live; signups before then are in Notion.</p>
+</div>
+
+<h2 id="log">Official log — the source of truth</h2>
+<p class="muted">What you enter here is what the homepage, the members area and the Sunday email show. Today's open
+selections are members-only; the public site shows a row once its date has passed.</p>
+<div class="card">
+  <form method="post" action="/admin/log/add" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(10rem,1fr)); gap:.5rem; align-items:end">
+    <label>Date<br><input type="date" name="race_date" required></label>
+    <label>System<br><select name="system">{% for x in systems %}<option>{{ x }}</option>{% endfor %}</select></label>
+    <label>Selection<br><input name="selection" placeholder="Horse / match"></label>
+    <label>Course / comp<br><input name="venue" placeholder="Goodwood"></label>
+    <label>Time (UK)<br><input name="event_time" placeholder="15:15"></label>
+    <label>Market<br><input name="market" placeholder="Place (3 places)"></label>
+    <label>Min price<br><input name="price" placeholder="1.60"></label>
+    <label>Stake £<br><input name="stake" placeholder="33.73"></label>
+    <label>Stake % of bank (cap {{ s.stake_cap_pct }}%)<br><input name="stake_pct" placeholder="3"></label>
+    <label style="grid-column:1/-1">Reasoning (shown to members)<br><input name="reasoning" style="width:100%"></label>
+    <label><input type="checkbox" name="no_bet"> No-bet day</label>
+    <label><input type="checkbox" name="free_pick"> Send to the Paddock as this week's free pick</label>
+    <button type="submit">Add to log</button>
+  </form>
+</div>
+<div class="card scroll">
+  <table>
+    <tr><th>Date</th><th>System</th><th>Selection</th><th class="num">Price</th><th class="num">Stake</th><th>Result</th><th class="num">P/L</th><th>Settle</th></tr>
+    {% for r in log_rows %}
+    <tr>
+      <td class="mono">{{ r['race_date']|day }}</td>
+      <td class="muted">{{ r['system'] }}</td>
+      <td>{{ r['selection'] }} <span class="muted">{{ r['venue'] or '' }} {{ r['event_time'] or '' }}</span>{% if r['free_pick'] %} <span class="badge gold">free pick</span>{% endif %}</td>
+      <td class="num mono">{{ r['price_x100']|odds }}</td>
+      <td class="num mono">{% if r['stake_pct'] is not none %}{{ '%g'|format(r['stake_pct']) }}%{% endif %} {% if r['stake_pence'] %}{{ r['stake_pence']|money }}{% endif %}</td>
+      <td class="{{ 'win' if r['result']=='won' else ('loss' if r['result']=='lost' else 'muted') }}">{{ r['position'] or '' }} {{ r['result'] }}</td>
+      <td class="num mono">{{ r['pnl_pence']|money }}</td>
+      <td>
+        <form method="post" action="/admin/log/{{ r['id'] }}/settle" class="inline">
+          <select name="result">{% for x in results %}<option {% if x == r['result'] %}selected{% endif %}>{{ x }}</option>{% endfor %}</select>
+          <input name="position" value="{{ r['position'] or '' }}" placeholder="2nd" style="width:4rem">
+          <input name="pnl" value="{{ (r['pnl_pence'] / 100) if r['pnl_pence'] is not none else '' }}" placeholder="P/L £" style="width:6rem">
+          <button class="quiet" type="submit">save</button>
+        </form>
+        {% if r['result'] in ('won','lost') %}<div class="muted" style="white-space:normal; font-size:.75rem; max-width:24rem; margin-top:.3rem">Post: {{ shares[r['id']] }}</div>{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<h2 id="settings">Settings</h2>
+<div class="card">
+  <form method="post" action="/admin/settings" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(16rem,1fr)); gap:.6rem; align-items:end">
+    <label>Founding places remaining (shown on the homepage — set it only when true)<br><input name="founding_remaining" value="{{ s.founding_remaining }}" class="mono"></label>
+    <label>Published stake cap, % of bank<br><input name="stake_cap_pct" value="{{ s.stake_cap_pct }}" class="mono"></label>
+    <label>Stripe Customer Portal link<br><input name="billing_portal_url" value="{{ s.billing_portal_url }}" placeholder="https://billing.stripe.com/p/login/..."></label>
+    <label>Members' Telegram invite link<br><input name="members_telegram_invite" value="{{ s.members_telegram_invite }}" placeholder="https://t.me/+..."></label>
+    <label>Yearly Member payment link (£249)<br><input name="yearly_member_url" value="{{ s.yearly_member_url }}" placeholder="https://buy.stripe.com/..."></label>
+    <label>Yearly Pro payment link (£449)<br><input name="yearly_pro_url" value="{{ s.yearly_pro_url }}" placeholder="https://buy.stripe.com/..."></label>
+    <label>Pro: Bank Tracker link<br><input name="pro_tracker_url" value="{{ s.pro_tracker_url }}"></label>
+    <label>Pro: latest Debrief link<br><input name="pro_debrief_url" value="{{ s.pro_debrief_url }}"></label>
+    <label style="grid-column:1/-1">Pro schedule (shown to Pro members)<br><input name="pro_schedule" value="{{ s.pro_schedule }}" placeholder="Debrief: first Monday of the month · Q&amp;A: third Thursday, 8pm" style="width:100%"></label>
+    <label><input type="checkbox" name="sunday_email_enabled" {% if s.sunday_email_enabled == '1' %}checked{% endif %}> Send the Sunday log email automatically (Sundays, 6pm)</label>
+    <label><input type="checkbox" name="verdict_email_enabled" {% if s.verdict_email_enabled == '1' %}checked{% endif %}> Send the day-30 "honest verdict" email</label>
+    <button type="submit">Save settings</button>
+  </form>
+</div>
+
+<h2 id="email">Email</h2>
+<div class="card">
+  <p>Outgoing email: {% if smtp_ok %}<span class="win">configured</span>{% else %}<span class="loss">not configured — run setup.sh and fill the SMTP questions</span>{% endif %}</p>
+  <form method="post" action="/admin/email/test" class="inline"><input type="email" name="to" placeholder="you@example.com" required><button class="quiet">Send a test email</button></form>
+  <p style="margin-top:1rem"><strong>This week's Sunday log</strong> ({{ weekly_rows }} settled result{{ '' if weekly_rows == 1 else 's' }}):</p>
+  <pre class="mono" style="white-space:pre-wrap; background:#1b1b1b; padding:.8rem; border-radius:6px; font-size:.78rem">{{ weekly_body }}</pre>
+  <form method="post" action="/admin/email/weekly-test" class="inline"><input type="email" name="to" placeholder="you@example.com" required><button class="quiet">Send me a preview</button></form>
+  <form method="post" action="/admin/email/weekly-now" class="inline" style="margin-left:1rem"><input name="confirm" placeholder="type SEND" style="width:7rem"><button class="quiet">Send to the whole list now</button></form>
+</div>
+
+<h2 id="founders">Founder Wall</h2>
+<div class="card">
+  <form method="post" action="/admin/founders/add" class="inline" style="flex-wrap:wrap">
+    <input name="display_name" placeholder="First name / handle" required>
+    <input name="joined_label" placeholder="Founder #7 · Sep 2026">
+    <input name="line" placeholder="One line, in their words" style="min-width:18rem">
+    <button type="submit">Add</button>
+  </form>
+  <p class="muted">Only approved entries show on the homepage. Approve only with the founder's permission.</p>
+  {% for f in founders %}
+  <div style="margin:.4rem 0">
+    <strong>{{ f['display_name'] }}</strong> <span class="muted">{{ f['joined_label'] or '' }}</span> — {{ f['line'] or '' }}
+    {% if f['approved'] %}<span class="badge" style="border-color:var(--win); color:var(--win)">live</span>{% else %}<span class="badge">hidden</span>{% endif %}
+    <form method="post" action="/admin/founders/{{ f['id'] }}" class="inline">
+      <button class="quiet" name="action" value="{{ 'hide' if f['approved'] else 'approve' }}">{{ 'hide' if f['approved'] else 'approve' }}</button>
+      <button class="quiet" name="action" value="delete">delete</button>
+    </form>
+  </div>
+  {% endfor %}
+</div>
+
+<h2 id="switchboard">Tier features — the switchboard</h2>
 <p class="muted">Flip what each tier includes, live. Members inherit their tier; per-member
 overrides below beat the tier. No redeploys, no code.</p>
 <div class="card scroll">
@@ -30,16 +146,8 @@ overrides below beat the tier. No redeploys, no code.</p>
   </table>
 </div>
 
-<h2>Founding 50 counter</h2>
-<div class="card">
-  <form method="post" action="/admin/founding-count" class="inline">
-    <input name="count" value="{{ founding_count }}" style="width:6rem" class="mono">
-    <button type="submit">Update</button>
-  </form>
-  <p class="muted">Hand-updated only. Posted only when true.</p>
-</div>
-
-<h2>Members ({{ rows|length }})</h2>
+<h2 id="members">Paying members ({{ rows|length }})</h2>
+<p class="muted">The Paddock (free list) is counted in the funnel above.</p>
 <div class="card">
   <form method="post" action="/admin/member/create" class="inline">
     <input type="email" name="email" placeholder="new member email" required style="min-width:14rem">
@@ -57,13 +165,14 @@ overrides below beat the tier. No redeploys, no code.</p>
       <span class="badge">{{ row.m['billing_period'] }}</span>
       <span class="badge {% if row.m['status'] not in ('active','trialing') %}loss{% endif %}">{{ row.m['status'] }}</span>
       <span class="badge">{{ row.m['delivery_mode'] }}</span>
+      {% if row.m['welcomed_at'] %}<span class="badge" style="border-color:var(--win); color:var(--win)">welcomed</span>{% endif %}
     </div>
     <span class="muted mono">#{{ row.m['id'] }}</span>
   </div>
   <form method="post" action="/admin/member/{{ row.m['id'] }}" class="inline" style="margin-top:.6rem; flex-wrap:wrap;">
     <select name="tier">{% for t in tiers %}<option value="{{ t['name'] }}" {% if t['name'] == row.m['tier'] %}selected{% endif %}>{{ t['display_name'] }}</option>{% endfor %}</select>
     <select name="billing_period">{% for p in periods %}<option {% if p == row.m['billing_period'] %}selected{% endif %}>{{ p }}</option>{% endfor %}</select>
-    <select name="status">{% for s in statuses %}<option {% if s == row.m['status'] %}selected{% endif %}>{{ s }}</option>{% endfor %}</select>
+    <select name="status">{% for st in statuses %}<option {% if st == row.m['status'] %}selected{% endif %}>{{ st }}</option>{% endfor %}</select>
     <select name="delivery_mode">
       <option value="manual" {% if row.m['delivery_mode'] == 'manual' %}selected{% endif %}>manual</option>
       <option value="auto" {% if row.m['delivery_mode'] == 'auto' %}selected{% endif %}>auto</option>

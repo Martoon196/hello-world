@@ -32,7 +32,8 @@ def test_tier_defaults(mrepo):
     assert mrepo.features_for(member_row(mrepo, tier="paddock")) == set()
     assert mrepo.features_for(member_row(mrepo, email="a@x.com", tier="member")) == {"selections", "full_log"}
     pro = mrepo.features_for(member_row(mrepo, email="b@x.com", tier="pro"))
-    assert {"selections", "full_log", "auto_bet", "bank_tracker", "debrief", "qa"} <= pro
+    assert {"selections", "full_log", "bank_tracker", "debrief", "qa"} <= pro
+    assert "auto_bet" not in pro  # held back until the bot passes its paper-trading review
 
 
 def test_tier_switchboard_flips_live(mrepo):
@@ -164,6 +165,7 @@ def test_member_feed_gating(repo, mrepo):
     app.include_router(build_portal_router(repo, mrepo))
     client = TestClient(app)
 
+    mrepo.set_tier_feature("pro", "auto_bet", True)  # switched on in /admin after review
     m = member_row(mrepo, email="feed@x.com", tier="pro")
     token = m["feed_token"]
 

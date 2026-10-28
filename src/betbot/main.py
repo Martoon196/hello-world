@@ -11,6 +11,7 @@ import logging
 import uvicorn
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from betbot.config import secrets, tunables
 from betbot.dashboard.app import build_dashboard_router
@@ -80,21 +81,30 @@ async def amain() -> None:
     pipeline = Pipeline(repo, betfair, executor, notifier)
     reconciler = Reconciler(repo, notifier)
 
+    from betbot.apex import emails as apex_emails
+    from betbot.apex.public import build_public_router
+    from betbot.apex.store import ApexStore
     from betbot.members.admin import build_admin_router
     from betbot.members.auth import build_auth_router
     from betbot.members.portal import build_portal_router
     from betbot.members.repo import MembersRepo
     from betbot.members.stripe_webhook import build_stripe_router
     mrepo = MembersRepo(repo)
+    store = ApexStore(repo)
 
     app = FastAPI(title="betbot", docs_url=None, redoc_url=None, openapi_url=None)
+    # The marketing site reads /public/*.json from the browser.
+    site = cfg.apex.site_url.rstrip("/")
+    app.add_middleware(CORSMiddleware, allow_origins=[site, site.replace("://", "://www.")],
+                       allow_methods=["GET"], allow_headers=[])
     app.include_router(build_feed_router(repo))
     app.include_router(build_whatsapp_router(repo, pipeline))
     app.include_router(build_bfbm_results_router(repo, reconciler))
     app.include_router(build_heartbeat_router(repo))
     app.include_router(build_auth_router(mrepo, notifier))
-    app.include_router(build_portal_router(repo, mrepo))
-    app.include_router(build_admin_router(mrepo, repo))
+    app.include_router(build_portal_router(repo, mrepo, notifier))
+    app.include_router(build_admin_router(mrepo, repo, notifier))
+    app.include_router(build_public_router(mrepo, store, notifier))
     app.include_router(build_stripe_router(mrepo, notifier))
     app.include_router(build_dashboard_router(repo))
 
@@ -110,6 +120,11 @@ async def amain() -> None:
         scheduler.add_job(_reprice_parked_tips, "interval", minutes=5, args=[repo, pipeline])
     scheduler.add_job(_daily_summary, "cron", hour=cfg.notifications.daily_summary_hour_utc,
                       args=[repo, notifier])
+    # Both are off until switched on in /admin -> Settings.
+    scheduler.add_job(apex_emails.send_weekly_log, "cron", day_of_week="sun", hour=18,
+                      timezone="Europe/London", args=[mrepo, store, notifier])
+    scheduler.add_job(apex_emails.send_verdict_requests, "cron", hour=11,
+                      timezone="Europe/London", args=[mrepo, store, notifier])
     scheduler.start()
 
     tasks = [asyncio.create_task(notifier.command_loop())]

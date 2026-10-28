@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Bank Builder — The Apex Code</title>
+<meta name="description" content="Set up a betting bank, a staking plan, and a tipster lie-detector. Use it on us; use it on everyone. Free guide from The Apex Code. 18+ only.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0A0A0A; --bone:#F2EDE3; --gold:#ECB02B; --ash:#9A948A; --line:#2a2a2a; --panel:#141414; }
+  * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body { background:var(--bg); color:var(--bone); margin:0; font:17px/1.65 Inter, system-ui, sans-serif; }
+  a { color:var(--gold); }
+  strong { font-weight:500; color:var(--bone); }
+  .wrap { max-width:44rem; margin:0 auto; padding:0 16px; }
+  .top { border-bottom:1px solid var(--line); }
+  .top .wrap { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding-top:.9rem; padding-bottom:.9rem; }
+  .wordmark { font-family:'Bebas Neue', sans-serif; font-size:1.6rem; letter-spacing:.08em; color:var(--bone); text-decoration:none; white-space:nowrap; }
+  .wordmark span { color:var(--gold); }
+  .printbtn { background:none; border:1px solid var(--line); color:var(--ash); font:500 .8rem Inter, system-ui, sans-serif; padding:.4rem .8rem; cursor:pointer; border-radius:2px; }
+  .printbtn:hover { color:var(--bone); border-color:var(--ash); }
+  main { padding-top:2.8rem; padding-bottom:3rem; }
+  h1 { font-family:'Bebas Neue', sans-serif; font-weight:400; font-size:3rem; line-height:1; letter-spacing:.04em; margin:0 0 .8rem; }
+  h1 span { color:var(--gold); }
+  .sub { color:var(--ash); font-size:1.15rem; margin:0 0 1.5rem; }
+  .meta { color:var(--ash); font-size:.85rem; }
+  h2 { font-family:'Bebas Neue', sans-serif; font-weight:400; font-size:2rem; line-height:1.1; letter-spacing:.04em; margin:3rem 0 .8rem; }
+  h2 .n { color:var(--gold); margin-right:.35em; }
+  h3 { font-size:1.05rem; font-weight:500; margin:1.8rem 0 .4rem; color:var(--gold); }
+  p, li { margin:0 0 .9rem; }
+  ul, ol { padding-left:1.4rem; }
+  li { margin-bottom:.5rem; }
+  .muted { color:var(--ash); }
+  .toc { border:1px solid var(--line); padding:1.1rem 1.4rem; margin:2rem 0; }
+  .toc h2 { margin:0 0 .5rem; font-size:1.4rem; }
+  .toc ol { margin:0; }
+  .toc li { margin:.25rem 0; }
+  .callout { border-left:3px solid var(--gold); background:var(--panel); padding:1rem 1.2rem; margin:1.6rem 0; }
+  .callout p:last-child { margin-bottom:0; }
+  .label { display:inline-block; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; font-weight:500; color:#0A0A0A; background:var(--gold); padding:.15rem .5rem; margin-bottom:.4rem; }
+  .tablewrap { overflow-x:auto; margin:1rem 0 1.6rem; }
+  table { width:100%; border-collapse:collapse; font-size:.9rem; line-height:1.45; }
+  caption { text-align:left; color:var(--ash); font-size:.85rem; padding-bottom:.5rem; }
+  th, td { border:1px solid var(--line); padding:.5rem .65rem; text-align:left; vertical-align:top; }
+  th { font-weight:500; color:var(--gold); background:#111; }
+  td.num, th.num { text-align:right; white-space:nowrap; }
+  .checks > li { margin-bottom:1.1rem; }
+  .checks > li strong { display:block; }
+  .write { display:inline-block; min-width:6rem; border-bottom:1px solid var(--ash); }
+  footer { border-top:1px solid var(--line); color:var(--ash); font-size:.82rem; line-height:1.6; }
+  footer .wrap { padding-top:1.5rem; padding-bottom:2.5rem; }
+  footer p { margin:0 0 .5rem; }
+  footer a { color:var(--ash); }
+  footer a:hover { color:var(--gold); }
+  @media (max-width:560px) {
+    body { font-size:16px; }
+    h1 { font-size:2.5rem; }
+    h2 { font-size:1.7rem; }
+    th, td { padding:.4rem .45rem; }
+  }
+  @media print {
+    @page { margin:18mm 16mm; }
+    :root { --bone:#000; --gold:#000; --ash:#444; --line:#999; --panel:#fff; }
+    body { background:#fff; color:#000; font-size:11pt; line-height:1.5; }
+    a { color:#000; }
+    .printbtn { display:none; }
+    .top { border-bottom:2px solid #000; }
+    main { padding-top:1.2rem; }
+    h1 span, h2 .n { color:#000; }
+    th { background:#eee; color:#000; }
+    .label { background:#fff; color:#000; border:1px solid #000; }
+    .callout { border-left:3px solid #000; }
+    .chapter { break-before:page; }
+    h2, h3 { break-after:avoid; }
+    table, .callout, .checks > li { break-inside:avoid; }
+    main a[href^="http"]::after { content:" (" attr(href) ")"; font-size:.85em; }
+    footer { border-top:1px solid #000; color:#000; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="wordmark" href="/">THE <span>APEX</span> CODE</a>
+    <button class="printbtn" type="button" onclick="window.print()">Print / save as PDF</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>THE BANK <span>BUILDER</span></h1>
+  <p class="sub">Set up a betting bank, a staking plan, and a tipster lie-detector. Use it on us; use it on everyone.</p>
+  <p class="meta">A free guide from The Apex Code. 18+ only. Not financial advice.</p>
+
+  <div class="callout">
+    <p><strong>Every tipster shows you their winners. We show you everything.</strong></p>
+    <p>This guide is the same idea, handed to you. It won't make you money. Nothing can promise that, and anyone who does is lying. What it can do is help you lose less stupidly, keep score honestly, and spot a con before it costs you.</p>
+  </div>
+
+  <nav class="toc" aria-label="Contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#read-this-first">Read this first</a></li>
+      <li><a href="#build-the-bank">Build the bank</a></li>
+      <li><a href="#staking-plan">The staking plan</a></li>
+      <li><a href="#keep-a-log">Keep a log</a></li>
+      <li><a href="#lie-detector">The tipster lie-detector</a></li>
+      <li><a href="#use-it-on-us">Use it on us</a></li>
+    </ol>
+  </nav>
+
+  <section id="read-this-first">
+    <h2><span class="n">01</span>Read this first</h2>
+    <p>Before banks, stakes or tipsters, one question. Is betting right for you right now?</p>
+    <p>Not in general. Right now. Be honest. Nobody is watching.</p>
+
+    <h3>The self-check</h3>
+    <ul>
+      <li>Are you under 18? Then stop here. This isn't for you.</li>
+      <li>Are you betting to win back money you've already lost?</li>
+      <li>Have you used money meant for rent, bills, food or debts to bet?</li>
+      <li>Have you borrowed, used a credit card or taken a loan to bet?</li>
+      <li>Do you hide how much you bet, or how often, from people close to you?</li>
+      <li>Have you bet more than you planned more than once in the last month?</li>
+      <li>Do you feel restless or irritable when you try to cut down?</li>
+      <li>Is betting what you reach for when you're stressed, bored or low?</li>
+      <li>Are you hoping betting will fix a money problem?</li>
+    </ul>
+
+    <p><strong>If any answer worries you, stop.</strong> Not after the weekend. Not after one more. Now. Then talk to someone who deals with this every day:</p>
+    <ul>
+      <li><strong>National Gambling Helpline:</strong> <a href="tel:08088020133">0808 8020 133</a>. Free and confidential.</li>
+      <li><strong>BeGambleAware:</strong> <a href="https://www.begambleaware.org">begambleaware.org</a> for advice, tools and local support.</li>
+      <li><strong>GAMSTOP:</strong> <a href="https://www.gamstop.co.uk">gamstop.co.uk</a> lets you self-exclude from every UK-licensed online gambling site in one go.</li>
+    </ul>
+
+    <h3>Tools that already exist. Use them.</h3>
+    <ul>
+      <li><strong>Deposit limits.</strong> Every UK-licensed bookmaker lets you set daily, weekly or monthly limits. Set them before you need them. Lowering a limit is quick; raising one usually comes with a waiting period. That's the point.</li>
+      <li><strong>Time-outs and self-exclusion.</strong> Take a break for a day, a week, or months. Bookmakers offer this in account settings.</li>
+      <li><strong>Reality checks.</strong> Pop-ups that tell you how long you've been logged in. Switch them on.</li>
+      <li><strong>Bank gambling blocks.</strong> Many UK banks and card providers let you block gambling payments in their app.</li>
+    </ul>
+    <p>Betting is not income. It is not a side hustle. It is not a way to fix money problems. It is entertainment that costs money, and most people who bet lose over time. If that sentence annoys you, read it again.</p>
+  </section>
+
+  <section id="build-the-bank" class="chapter">
+    <h2><span class="n">02</span>Build the bank</h2>
+    <p>A betting bank is a separate pot of money set aside only for betting. It is the single most useful thing you can do, and most people never do it.</p>
+
+    <h3>The rules</h3>
+    <ol>
+      <li><strong>Only money you can afford to lose entirely.</strong> Not "probably won't lose". Entirely. If losing every penny of it would change your month, it's too big.</li>
+      <li><strong>Treat it as already spent.</strong> The moment it goes in the bank, it's gone. Like a gig ticket. If any of it comes back, that's a bonus, not a plan.</li>
+      <li><strong>Keep it separate.</strong> A separate bank account, a separate e-wallet, or a separate bookmaker or exchange balance. Not your current account. Mixing betting money with living money is how betting money quietly becomes living money.</li>
+      <li><strong>Decide the size before you start. Write it down.</strong> On paper, with the date. You'll be tempted to change it later. The written number is there to argue with you.</li>
+      <li><strong>Never top it up to chase.</strong> If the bank shrinks, the bank is smaller. You don't refill it because you're "due". You're not due. Nobody is due.</li>
+      <li><strong>Decide your stop point too.</strong> For example: "If this bank halves, I stop and review for a month." Pick the number now, while you're calm.</li>
+    </ol>
+
+    <div class="callout">
+      <p class="label">Write it down</p>
+      <p>My betting bank is £<span class="write">&nbsp;</span>, set on <span class="write">&nbsp;</span> (date).</p>
+      <p>It is held in <span class="write">&nbsp;</span> and nowhere else.</p>
+      <p>If it falls to £<span class="write">&nbsp;</span>, I stop for at least <span class="write">&nbsp;</span>.</p>
+      <p>I will not add money to it to recover losses.</p>
+    </div>
+
+    <p>What about winnings? Decide that in advance as well. Some people take out anything above the starting figure at the end of each month. Others leave it in. Either is fine. Making it up on the day isn't.</p>
+  </section>
+
+  <section id="staking-plan" class="chapter">
+    <h2><span class="n">03</span>The staking plan</h2>
+    <p>A staking plan decides how much goes on each bet before you know anything about the bet. That's what makes it useful. It takes the "how much" out of your hands at the exact moment your hands are least reliable.</p>
+
+    <h3>Flat-percentage staking</h3>
+    <p>The idea is simple. Every stake is a fixed percentage of your <em>current</em> bank. Not the bank you started with. Not the bank you wish you had. The one in front of you.</p>
+    <p>Our racing system, Apex Anchor, uses 3%. That is not a magic number. Lower is safer. If you're unsure, go lower.</p>
+    <p>Stake = current bank × your percentage. With a £500 bank at 3%, the stake is £15.</p>
+
+    <h3>When to recalculate</h3>
+    <p>You need to choose how often the stake gets recalculated, and stick to it.</p>
+    <ul>
+      <li><strong>After every bet.</strong> Most responsive. Stakes shrink straight away in a bad run. More arithmetic.</li>
+      <li><strong>Daily.</strong> Work out the stake once each morning from last night's closing bank. Every bet that day uses that stake. A good middle ground, and the easiest way to handle several bets running at the same time.</li>
+      <li><strong>Weekly.</strong> Recalculate on the same day each week. Simplest. But stakes don't shrink during a bad week, so the bank takes more damage before the plan reacts.</li>
+    </ul>
+    <p>Pick one. Write it down. Don't switch mid-run because a different method would have looked better last week.</p>
+
+    <h3>Why it protects the bank</h3>
+    <p>When you lose, the bank shrinks, so the next stake shrinks. In a losing run you are automatically betting less. A fixed £15 stake keeps hitting the bank just as hard however low it gets. A percentage stake backs off.</p>
+
+    <div class="tablewrap">
+      <table>
+        <caption><span class="label">Illustration only — not a result</span><br>A £500 bank, 3% stakes recalculated after every bet, through five losing bets in a row.</caption>
+        <thead>
+          <tr><th>Bet</th><th class="num">Bank before</th><th class="num">Stake (3%)</th><th>Result</th><th class="num">P/L</th><th class="num">Bank after</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td class="num">£500.00</td><td class="num">£15.00</td><td>Lost</td><td class="num">−£15.00</td><td class="num">£485.00</td></tr>
+          <tr><td>2</td><td class="num">£485.00</td><td class="num">£14.55</td><td>Lost</td><td class="num">−£14.55</td><td class="num">£470.45</td></tr>
+          <tr><td>3</td><td class="num">£470.45</td><td class="num">£14.11</td><td>Lost</td><td class="num">−£14.11</td><td class="num">£456.34</td></tr>
+          <tr><td>4</td><td class="num">£456.34</td><td class="num">£13.69</td><td>Lost</td><td class="num">−£13.69</td><td class="num">£442.65</td></tr>
+          <tr><td>5</td><td class="num">£442.65</td><td class="num">£13.28</td><td>Lost</td><td class="num">−£13.28</td><td class="num">£429.37</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Over five losers the difference looks small. Stretch it out and it isn't. After 20 losers in a row, a flat £15 stake leaves £200. The 3% plan leaves about £272. A flat £15 stake empties the bank in 34 straight losers. The percentage plan never quite reaches zero, because every stake is a slice of whatever's left.</p>
+    <p>Be honest about the trade-off. Smaller stakes after losses also means slower recovery when things turn. That's the price of staying in the game. It is worth paying.</p>
+
+    <h3>Never increase stakes to recover losses</h3>
+    <p>Doubling up after a loser feels logical. It's the fastest way to empty a bank. Here's what it looks like.</p>
+
+    <div class="tablewrap">
+      <table>
+        <caption><span class="label">Illustration only — not a result</span><br>The same £500 bank, doubling the stake after every loser.</caption>
+        <thead>
+          <tr><th>Bet</th><th class="num">Stake</th><th>Result</th><th class="num">Total lost so far</th><th class="num">Bank left</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td class="num">£15</td><td>Lost</td><td class="num">£15</td><td class="num">£485</td></tr>
+          <tr><td>2</td><td class="num">£30</td><td>Lost</td><td class="num">£45</td><td class="num">£455</td></tr>
+          <tr><td>3</td><td class="num">£60</td><td>Lost</td><td class="num">£105</td><td class="num">£395</td></tr>
+          <tr><td>4</td><td class="num">£120</td><td>Lost</td><td class="num">£225</td><td class="num">£275</td></tr>
+          <tr><td>5</td><td class="num">£240</td><td>Lost</td><td class="num">£465</td><td class="num">£35</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Five losers. Bet six would need £480. There's £35 left. Five losers in a row is not rare. It happens to everyone, regularly. Chasing doesn't fix a bad run. It turns a bad run into an empty bank.</p>
+
+    <h3>Set a hard personal cap</h3>
+    <p>Percentages grow when the bank grows. That's fine up to a point. Set a maximum single stake in pounds that you will never exceed, whatever the arithmetic says. And keep the stop point from chapter 2.</p>
+    <div class="callout">
+      <p class="label">Write it down</p>
+      <p>My stake is <span class="write">&nbsp;</span>% of the current bank, recalculated <span class="write">&nbsp;</span> (after every bet / daily / weekly).</p>
+      <p>My maximum single stake is £<span class="write">&nbsp;</span>, no matter what.</p>
+    </div>
+  </section>
+
+  <section id="keep-a-log" class="chapter">
+    <h2><span class="n">04</span>Keep a log</h2>
+    <p>Memory is a liar. It keeps the 8/1 winner from March in high definition and quietly deletes the eleven losers either side of it. Every punter's memory runs a little tipster operation, and it uses the same trick: the vanishing loser.</p>
+    <p>A log fixes that. Every bet, every time, written down.</p>
+
+    <h3>What to record for every bet</h3>
+    <ul>
+      <li><strong>Date</strong> (and the time you placed it).</li>
+      <li><strong>Selection</strong>: the horse, team or player, and the event.</li>
+      <li><strong>Market</strong>: win, place, each-way, match result, over/under and so on.</li>
+      <li><strong>Price taken</strong>: the odds you actually got, not the best price you saw later.</li>
+      <li><strong>Stake.</strong></li>
+      <li><strong>Result</strong>: won, lost, placed, void.</li>
+      <li><strong>P/L</strong>: profit or loss on that bet, after any exchange commission.</li>
+      <li><strong>Running bank</strong>: the bank after this bet settles.</li>
+    </ul>
+    <p>Write the bet down when you place it, not when it settles. Price and stake first. Result later. If you only log once you know the result, you'll start "forgetting" the ones that lost. Everybody does.</p>
+
+    <h3>A simple template</h3>
+    <div class="tablewrap">
+      <table>
+        <caption><span class="label">Illustration only — not a result</span><br>The first row is a made-up example to show the format. Copy the columns into a notebook or spreadsheet.</caption>
+        <thead>
+          <tr><th>Date</th><th>Selection</th><th>Market</th><th class="num">Price</th><th class="num">Stake</th><th>Result</th><th class="num">P/L</th><th class="num">Bank</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Example</td><td>Horse A, 14:30</td><td>Place</td><td class="num">1.50</td><td class="num">£15.00</td><td>Lost</td><td class="num">−£15.00</td><td class="num">£485.00</td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Why losers matter most</h3>
+    <p>Winners tell you nothing on their own. Anyone can find winners. The question is always what it cost to find them. Only the losers answer that. A log with the losers missing isn't a record. It's an advert.</p>
+
+    <h3>Review it once a month</h3>
+    <p>Total staked. Total profit or loss. Number of bets. How many won. Average price. Longest losing run. If the numbers say stop, stop. The log doesn't care how you feel about it, which is exactly why it's useful.</p>
+  </section>
+
+  <section id="lie-detector" class="chapter">
+    <h2><span class="n">05</span>The tipster lie-detector</h2>
+    <p>The tipping industry runs on three old tricks. <strong>The vanishing loser</strong>: losing tips quietly deleted. <strong>The lock of the day</strong>: fake certainty sold as a sure thing. <strong>The fresh start</strong>: a new name and a clean slate after a bad run.</p>
+    <p>Here's how to catch them. Ask every one of these questions about any tipster before you pay a penny. If you can't get a straight answer, that is your answer.</p>
+
+    <ol class="checks">
+      <li><strong>Are losers posted with the same prominence as winners?</strong>
+        Same channel, same size, same day. If winners get a fanfare and losers get silence, or nothing, you are looking at the vanishing loser.</li>
+      <li><strong>Is every selection timestamped before the off, with a price and a stake?</strong>
+        A tip posted after the race is not a tip. A tip with no price can be claimed at any price. A tip with no stake can be called a "max bet" once it wins.</li>
+      <li><strong>Is there a complete, unbroken record from bet one?</strong>
+        Not "since we relaunched". Not "the last 30 days". From the start. Gaps are where the losers live.</li>
+      <li><strong>Is the sample big enough?</strong>
+        Thirty bets proves almost nothing. Picture someone with no skill at all, backing selections at odds of 3.0 (2/1) that genuinely have a one-in-three chance. Over 30 bets you'd expect 10 winners and to roughly break even. But 14 or more winners will happen by pure luck about one time in eleven. That's +12 points and a "+40% ROI" headline from nothing. A different no-skill tipster gets 6 winners and loses 12 points. Same skill. Different luck. Run a hundred no-skill tipsters and around nine of them will look brilliant for a month. They're the ones advertising. <span class="muted">(Illustration only — not a result. This is arithmetic, not anyone's record.)</span> Look for hundreds of bets, ideally more, across good months and bad.</li>
+      <li><strong>Is profit quoted without stakes, odds or the bank size?</strong>
+        "£4,200 profit this month!" means nothing. On what stakes? From what bank? At what prices? Profit in pounds with no stakes is a number chosen to impress you.</li>
+      <li><strong>Do they use words like "lock", "guaranteed", "banker" or "can't lose"?</strong>
+        There's no such thing. Every bet can lose, and the market already knows about most "certainties". This is the lock of the day. Walk away.</li>
+      <li><strong>Do they only show screenshots of winning slips?</strong>
+        A screenshot proves one bet won. It says nothing about the forty that didn't. Slips can also be edited, or come from someone else's account.</li>
+      <li><strong>Have they rebranded, or are there channels with new names and the same faces?</strong>
+        A bad run, then a new name, a new logo and a clean record. That's the fresh start. Search for old handles and old channel names before you trust a new one.</li>
+      <li><strong>Is there pressure?</strong>
+        Countdown timers. "Only 3 spots left." DMs urging you to bet bigger, bet now, or "load up". A tipster who wants you to stake more than your plan says is working for themselves, not you.</li>
+      <li><strong>Do they quote strike rate without average odds, or average odds without strike rate?</strong>
+        "80% winners!" at average odds of 1.20 loses money. "Average odds 12.0!" with a 4% strike rate loses money too. You need both numbers, and the stakes, to judge anything.</li>
+      <li><strong>Were the prices ones you could actually get?</strong>
+        Proofing at early prices that vanish in seconds, at bookmakers that restrict winning accounts, or at the best price across twenty firms isn't a record you can follow. Ask what price a normal person could have got at the time the tip went out.</li>
+    </ol>
+
+    <div class="callout">
+      <p>One failed check is a warning. Two is a pattern. Three, and you already know what you're looking at.</p>
+    </div>
+  </section>
+
+  <section id="use-it-on-us" class="chapter">
+    <h2><span class="n">06</span>Use it on us</h2>
+    <p>We wrote this guide, so you should be most suspicious of us. Good. Apply every check in chapter 5 to The Apex Code.</p>
+    <ul>
+      <li>Our public log is at <a href="https://apexcode.uk">apexcode.uk</a>. Every result goes on it, losers included. Check whether they get the same prominence as the winners.</li>
+      <li>Apex Anchor selections go out by around 10:00 on Telegram and in the members area, with the price and stake. Telegram timestamps every post. Check them against the off time.</li>
+      <li>Every Apex Anchor result is logged within 24 hours. If one isn't, that's a breach of our own rules, and our Discipline Guarantee means paying members get that month back.</li>
+      <li>Our football system, Apex Football Gold, publishes "no bet" days. Some days the honest answer is nothing.</li>
+      <li>We don't use "locks". We don't do countdown timers. We will never DM you telling you to bet bigger.</li>
+    </ul>
+    <p>Don't take our word for any of that. Watch first. Join <strong>The Paddock</strong> for free: one free selection a week, the full log every Sunday by email, and our free Telegram channel at <a href="https://t.me/TheApexCodeUK">t.me/TheApexCodeUK</a>. Watch the losers come in. Watch how we handle a bad week. Then decide. If we fail any check in this guide, don't pay us. And tell us.</p>
+
+    <div class="callout">
+      <p class="label">Before you go</p>
+      <p>18+ only. Only bet money you can afford to lose entirely. Never chase losses. Betting is not income and it won't fix money problems. If it stops being fun, stop.</p>
+      <p>Free, confidential support: National Gambling Helpline <a href="tel:08088020133">0808 8020 133</a> · <a href="https://www.begambleaware.org">BeGambleAware.org</a> · self-exclude at <a href="https://www.gamstop.co.uk">GAMSTOP</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>The Apex Code · 18+ only · <a href="https://www.begambleaware.org">BeGambleAware.org</a> · National Gambling Helpline <a href="tel:08088020133">0808 8020 133</a> · <a href="https://www.gamstop.co.uk">GAMSTOP</a> · Contact <a href="mailto:hello@apexcode.uk">hello@apexcode.uk</a></p>
+    <p><a href="/terms.html">Membership terms</a> · <a href="/privacy.html">Privacy notice</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

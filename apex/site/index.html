@@ -22,7 +22,7 @@
      WIRED 3 Sept 2026: Stripe links live (Founding/Member/Pro), Paddock form
      posts to /subscribe.php (Notion), Telegram + contact email set.
      £1-trial copy removed until that offer exists in Stripe.
-     Founding-places counter: update data-remaining on #founding-card
+     Founding-places counter: set in members.apexcode.uk/admin -> Settings (read live)
      by hand as real sales come in. Never show a number that isn't true.
      ============================================================ -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
@@ -305,14 +305,14 @@
       </div>
       <p class="hero-note">No profit promises. No "locks of the day." If you're looking for either, we're not for you.</p>
     </div>
-    <div class="ledger" aria-label="Live proofing log excerpt">
-      <div class="ledger-head"><span>Proofing log</span><span class="live">Launch week · Aug 2026</span></div>
+    <div class="ledger" id="hero-ledger" aria-label="Live proofing log excerpt">
+      <div class="ledger-head"><span>Proofing log</span><span class="live" id="ledger-when">Launch week · Aug 2026</span></div>
       <div class="lrow"><span class="d">24 AUG</span><span class="h">The Mean Fiddler</span><span class="pos">1st</span><span class="pl win">+£31.12</span></div>
       <div class="lrow"><span class="d">25 AUG</span><span class="h">Luminous Warrior</span><span class="pos">2nd</span><span class="pl win">+£183.00</span></div>
       <div class="lrow"><span class="d">27 AUG</span><span class="h">Kanzi</span><span class="pos">5th</span><span class="pl loss">−£122.35</span></div>
       <div class="lrow"><span class="d">28 AUG</span><span class="h">Withtearsinmyeyes</span><span class="pos">1st</span><span class="pl win">+£38.65</span></div>
       <div class="lrow"><span class="d">29 AUG</span><span class="h">Majestic Flame</span><span class="pos">9th</span><span class="pl loss">−£30.00</span></div>
-      <div class="ledger-foot">Updated after every result. The −£122.35 stays on the page. That's the point.</div>
+      <div class="ledger-foot">Updated after every result. Losers stay on the page, same size as the wins. That's the point.</div>
     </div>
   </div>
 </section>
@@ -407,13 +407,13 @@
   <div class="wrap">
     <span class="eyebrow rv">The log</span>
     <h2 class="rv">RECEIPTS, NOT PROMISES</h2>
-    <p class="lede rv">The official Apex Anchor proofing log, from day one. Not "since we started counting." Not "best month." From the first bet ever placed. This excerpt is launch week; the full log lives here and updates after every result.</p>
+    <p class="lede rv">The official Apex Anchor proofing log, from day one. Not "since we started counting." Not "best month." From the first bet ever placed. The newest results are below, losers included, and the table updates after every result.</p>
     <div class="logtable rv">
       <table>
         <thead>
           <tr><th>Date</th><th>Selection</th><th>Course</th><th class="num">Result</th><th class="num">P/L</th></tr>
         </thead>
-        <tbody>
+        <tbody id="log-rows">
           <tr><td class="dim">24 Aug</td><td>The Mean Fiddler</td><td class="dim">—</td><td class="num" style="color:var(--win)">1st</td><td class="num" style="color:var(--win)">+£31.12</td></tr>
           <tr><td class="dim">25 Aug</td><td>Luminous Warrior</td><td class="dim">—</td><td class="num" style="color:var(--win)">2nd</td><td class="num" style="color:var(--win)">+£183.00</td></tr>
           <tr><td class="dim">27 Aug</td><td>Kanzi</td><td class="dim">—</td><td class="num" style="color:var(--loss)">5th</td><td class="num" style="color:var(--loss)">−£122.35</td></tr>
@@ -423,6 +423,7 @@
         </tbody>
       </table>
     </div>
+    <p id="log-updated" class="dim" style="margin-top:10px; font-size:.85rem;" hidden></p>
     <p class="honesty rv"><strong>Straight answer about the record:</strong> it's weeks old. We're not going to pretend otherwise — a five-year track record screenshot is exactly the kind of thing this industry fakes. The record is being built right now, in public, one logged result at a time. That's why founding pricing exists: you're joining during proofing, and the price reflects it.</p>
   </div>
 </section>
@@ -447,7 +448,7 @@
       <div class="tier hot rv">
         <h3>APEX MEMBER</h3>
         <div class="price">£24.95 <small>/month</small></div>
-        <div class="per">or £249/yr (2 months free)</div>
+        <div class="per" id="per-member">or £249/yr (2 months free)</div>
         <ul>
           <li><strong>Every qualified selection</strong>, both systems, by ~10am</li>
           <li><strong>Exact stake %, minimum price &amp; target</strong> on every bet</li>
@@ -460,7 +461,7 @@
       <div class="tier rv">
         <h3>APEX PRO</h3>
         <div class="price">£44.95 <small>/month</small></div>
-        <div class="per">or £449/yr</div>
+        <div class="per" id="per-pro">or £449/yr</div>
         <ul>
           <li>Everything in Member, plus:</li>
           <li><strong>The Apex Bank Tracker</strong> — the actual spreadsheet the official bank runs on</li>
@@ -478,12 +479,21 @@
         <h3>THE FOUNDING 50</h3>
         <p><strong>£14.95/month, locked for life — first 50 members only.</strong> Why so cheap? Because you're joining while the record is still being proofed, and the price should say so. When the public log reaches 90 days, the door price goes to £24.95 and the founding rate is never offered again. Founders get a badge in the community, an optional spot on the Founder Wall, and a direct line into how the systems develop.</p>
         <p class="trial-note">Real cap, real reason, no countdown clocks. When the 50 are gone, they're gone.</p>
+        <p class="trial-note" id="founding-left" style="color:var(--gold);" hidden></p>
       </div>
       <div class="found-price">
         <div class="price">£14.95<small>/mo · for life</small></div>
         <a class="btn btn-gold" href="https://buy.stripe.com/7sYfZggzkaKLbNv6h1bEA00">CLAIM A FOUNDING PLACE</a>
       </div>
     </div>
+  </div>
+</section>
+
+<section id="founders" hidden>
+  <div class="wrap">
+    <span class="eyebrow rv">The Founder Wall</span>
+    <h2 class="rv">THE FIRST 50, IN THEIR OWN WORDS</h2>
+    <div id="founder-list" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px;"></div>
   </div>
 </section>
 
@@ -572,7 +582,7 @@
     <div class="cols">
       <div class="legal">
         <p><strong style="color:var(--bone)">The honest small print, in normal-sized type:</strong> The Apex Code provides betting research and opinion for entertainment and information purposes. It is not financial advice and not a guarantee of any outcome. Betting involves risk; most bettors lose over time. Past results — including our own published log — do not predict future results. You are responsible for your own bets and for complying with the law where you live. Service available to persons aged 18 and over only.</p>
-        <p class="legal">© 2026 The Apex Code · <a href="#" data-wire="Terms page">Terms</a> · <a href="#" data-wire="Privacy policy">Privacy</a> · <a href="#safer">Safer gambling</a> · Contact: <a href="mailto:hello@apexcode.uk">hello@apexcode.uk</a></p>
+        <p class="legal">© 2026 The Apex Code · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · <a href="/bank-builder.html">The Bank Builder</a> · <a href="#safer">Safer gambling</a> · Contact: <a href="mailto:hello@apexcode.uk">hello@apexcode.uk</a></p>
       </div>
       <div>
         <p>Take time to think. <a href="https://www.begambleaware.org">BeGambleAware.org</a><br>National Gambling Helpline: 0808 8020 133 (free, 24/7)<br>Self-exclusion: <a href="https://www.gamstop.co.uk">GAMSTOP</a></p>
@@ -582,6 +592,7 @@
 </footer>
 
 <div id="toast" role="status" aria-live="polite"></div>
+<style>[hidden]{display:none !important;}</style>
 
 <script>
   // Scroll reveals (respects reduced motion via CSS)
@@ -614,6 +625,102 @@
       }
     });
   });
+</script>
+
+<script>
+  // Live data from the members server: the official log, founding places,
+  // yearly links, the Founder Wall. The static rows above are the fallback.
+  (function(){
+    var API = 'https://members.apexcode.uk';
+    // Anonymous page count: no cookies, no IP stored, no profiles.
+    try {
+      var q = new URLSearchParams(location.search), px = new Image();
+      px.src = API + '/public/hit?p=' + encodeURIComponent(location.pathname) +
+        '&r=' + encodeURIComponent(document.referrer || '') +
+        '&us=' + encodeURIComponent(q.get('utm_source') || '') +
+        '&um=' + encodeURIComponent(q.get('utm_medium') || '') +
+        '&uc=' + encodeURIComponent(q.get('utm_campaign') || '');
+    } catch (e) {}
+
+    function esc(v){ return String(v == null ? '' : v).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+    function tone(r){ return r.result === 'won' ? 'win' : (r.result === 'lost' ? 'loss' : ''); }
+    function outcome(r){
+      if (r.result === 'pending') return 'Logged on settle';
+      if (r.result === 'no_bet') return 'No bet';
+      if (r.result === 'void') return 'Void';
+      return r.position || (r.result === 'won' ? 'Won' : 'Lost');
+    }
+    function getJSON(path){ return fetch(API + path).then(function(r){ return r.ok ? r.json() : null; }); }
+
+    getJSON('/public/log.json').then(function(d){
+      if (!d || !d.rows || !d.rows.length) return;
+      var settled = d.rows.filter(function(r){ return r.result === 'won' || r.result === 'lost'; });
+      var hero = document.getElementById('hero-ledger');
+      if (hero && settled.length) {
+        var foot = hero.querySelector('.ledger-foot');
+        hero.querySelectorAll('.lrow').forEach(function(e){ e.remove(); });
+        settled.slice(0, 5).forEach(function(r){
+          var row = document.createElement('div');
+          row.className = 'lrow';
+          row.innerHTML = '<span class="d">' + esc(r.label.toUpperCase()) + '</span><span class="h">' +
+            esc(r.selection) + '</span><span class="pos">' + esc(outcome(r)) + '</span><span class="pl ' +
+            tone(r) + '">' + esc(r.pnl || '') + '</span>';
+          hero.insertBefore(row, foot);
+        });
+        var when = document.getElementById('ledger-when');
+        if (when) when.textContent = 'Latest results';
+      }
+      var tbody = document.getElementById('log-rows');
+      if (tbody) {
+        tbody.innerHTML = d.rows.slice(0, 15).map(function(r){
+          var t = tone(r), colour = t ? ' style="color:var(--' + t + ')"' : '', dim = t ? '' : ' dim';
+          var where = [r.venue, r.time].filter(Boolean).join(' ') || '—';
+          var pl = r.result === 'pending' ? (r.stake ? esc(r.stake) + ' staked' : '—') : esc(r.pnl || '—');
+          return '<tr><td class="dim">' + esc(r.label) + '</td><td>' + esc(r.selection) + '</td><td class="dim">' +
+            esc(where) + '</td><td class="num' + dim + '"' + colour + '>' + esc(outcome(r)) + '</td><td class="num' +
+            dim + '"' + colour + '>' + pl + '</td></tr>';
+        }).join('');
+      }
+      var up = document.getElementById('log-updated');
+      if (up && d.updated_at) {
+        up.textContent = 'Log last updated ' + new Date(d.updated_at).toLocaleDateString('en-GB',
+          {day: 'numeric', month: 'long', year: 'numeric'}) + '.';
+        up.hidden = false;
+      }
+    }).catch(function(){});
+
+    getJSON('/public/stats.json').then(function(s){
+      if (!s) return;
+      var card = document.getElementById('founding-card'), left = document.getElementById('founding-left');
+      if (card && left && typeof s.founding_remaining === 'number') {
+        card.dataset.remaining = s.founding_remaining;
+        left.textContent = s.founding_remaining > 0
+          ? s.founding_remaining + ' of 50 founding places left.'
+          : 'All 50 founding places are taken.';
+        left.hidden = false;
+        if (s.founding_remaining <= 0) {
+          var b = card.querySelector('a.btn');
+          if (b) { b.removeAttribute('href'); b.textContent = 'FOUNDING 50 — FULL'; b.style.opacity = .5; b.style.pointerEvents = 'none'; }
+        }
+      }
+      function yearly(id, url, text){
+        var el = document.getElementById(id);
+        if (el && url) el.innerHTML = 'or <a href="' + esc(url) + '">' + esc(text) + '</a>';
+      }
+      yearly('per-member', s.yearly_member_url, '£249/yr (2 months free)');
+      yearly('per-pro', s.yearly_pro_url, '£449/yr');
+    }).catch(function(){});
+
+    getJSON('/public/founders.json').then(function(f){
+      if (!f || !f.founders || !f.founders.length) return;
+      document.getElementById('founder-list').innerHTML = f.founders.map(function(x){
+        return '<div class="card"><h3>' + esc(x.name) + '</h3><p class="dim">' + esc(x.joined || '') +
+          '</p><p>' + esc(x.line || '') + '</p></div>';
+      }).join('');
+      document.getElementById('founders').hidden = false;
+    }).catch(function(){});
+  })();
 </script>
 
 </body>

@@ -49,6 +49,7 @@ notifications:
 
 apex:
   base_url: "https://members.apexcode.uk"   # served by Caddy (reverse proxy to :8080)
+  site_url: "https://apexcode.uk"           # the public marketing site (SiteGround)
   # Map Stripe price IDs to membership. Marketing can add/repoint tiers here, no code.
   stripe_prices:
     price_1UBNiBAK3Gy9osQnyDZVYjDb: {tier: founding, period: monthly}

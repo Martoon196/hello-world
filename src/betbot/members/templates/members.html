@@ -14,7 +14,99 @@
 {% if not active %}
 <div class="card" style="border-color:var(--loss)">
   Your membership is <strong>{{ member['status'] }}</strong> — access is paused.
-  Sort your billing and everything springs back.
+  {% if s.billing_portal_url %}<a href="{{ s.billing_portal_url }}">Sort your billing</a>{% else %}Sort your billing{% endif %}
+  and everything springs back.
+</div>
+{% endif %}
+
+{% if not paid %}
+<div class="card">
+  <p>You're on <strong>The Paddock</strong> (free): one selection a week by email, the Sunday log, and the
+  <a href="https://apexcode.uk/bank-builder.html">Bank Builder guide</a>.</p>
+  <p><a href="https://apexcode.uk/#membership">See membership</a> for every selection by about 10am.</p>
+</div>
+{% endif %}
+
+{% if paid and active %}
+<h2>Your membership</h2>
+<div class="card">
+  {% if s.members_telegram_invite %}
+  <p>Members' Telegram: <a href="{{ s.members_telegram_invite }}">join the group</a> — selections land there too.</p>
+  {% endif %}
+  {% if s.billing_portal_url %}
+  <p><a href="{{ s.billing_portal_url }}">Manage billing</a> — upgrade to Pro, switch to yearly
+  (2 months free), update your card or cancel. Cancelling takes effect at the end of the period you've paid for.</p>
+  {% endif %}
+  <p class="muted">Want a 30-day pause instead of cancelling? Email
+  <a href="mailto:hello@apexcode.uk">hello@apexcode.uk</a>. First 14 days? Ask and you'll get a full refund.</p>
+</div>
+{% endif %}
+
+{% if 'selections' in features %}
+<h2>Today's selections</h2>
+<div class="card scroll">
+  {% if selections %}
+  <table>
+    <tr><th>Date</th><th>System</th><th>Selection</th><th>Where</th><th>Market</th><th class="num">Min price</th><th class="num">Stake</th></tr>
+    {% for r in selections %}
+    <tr>
+      <td class="mono">{{ r['race_date']|day }}</td>
+      <td class="muted">{{ r['system'] }}</td>
+      <td><strong>{{ r['selection'] }}</strong>{% if r['reasoning'] %}<div class="muted" style="white-space:normal; max-width:28rem">{{ r['reasoning'] }}</div>{% endif %}</td>
+      <td>{{ r['venue'] or '' }} <span class="mono">{{ r['event_time'] or '' }}</span></td>
+      <td>{{ r['market'] or '—' }}</td>
+      <td class="num mono">{{ r['price_x100']|odds }}</td>
+      <td class="num mono">{% if r['stake_pct'] is not none %}{{ '%g'|format(r['stake_pct']) }}% of bank{% else %}—{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">No open selections right now. No-bet days are part of the discipline.</p>{% endif %}
+</div>
+{% endif %}
+
+{% if 'full_log' in features %}
+<h2>The log — every result, in full</h2>
+<div class="card scroll">
+  {% if log_rows %}
+  <table>
+    <tr><th>Date</th><th>System</th><th>Selection</th><th>Where</th><th class="num">Price</th><th>Result</th><th class="num">P/L</th></tr>
+    {% for r in log_rows %}
+    <tr>
+      <td class="mono">{{ r['race_date']|day }}</td>
+      <td class="muted">{{ r['system'] }}</td>
+      <td>{{ r['selection'] }}</td>
+      <td>{{ r['venue'] or '' }} <span class="mono">{{ r['event_time'] or '' }}</span></td>
+      <td class="num mono">{{ r['price_x100']|odds }}</td>
+      <td class="{{ 'win' if r['result'] == 'won' else ('loss' if r['result'] == 'lost' else 'muted') }}">
+        {{ r['position'] or '' }} {{ {'won':'WON','lost':'LOST','void':'VOID','no_bet':'NO BET','pending':'awaiting result'}[r['result']] }}</td>
+      <td class="num mono {{ 'win' if (r['pnl_pence'] or 0) > 0 else ('loss' if (r['pnl_pence'] or 0) < 0 else 'muted') }}">{{ r['pnl_pence']|money }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">The log fills as results settle. Losses get logged with the same energy as wins.</p>{% endif %}
+</div>
+{% endif %}
+
+{% if 'bank_tracker' in features or 'debrief' in features or 'qa' in features %}
+<h2>Pro</h2>
+<div class="card">
+  {% if 'bank_tracker' in features %}
+  <p><strong>The Apex Bank Tracker</strong> —
+  {% if s.pro_tracker_url %}<a href="{{ s.pro_tracker_url }}">open the spreadsheet</a>{% else %}<span class="muted">link coming shortly</span>{% endif %}</p>
+  {% endif %}
+  {% if 'debrief' in features %}
+  <p><strong>Monthly Debrief</strong> —
+  {% if s.pro_debrief_url %}<a href="{{ s.pro_debrief_url }}">watch the latest</a>{% else %}<span class="muted">first one coming shortly</span>{% endif %}</p>
+  {% endif %}
+  {% if s.pro_schedule %}<p class="muted">{{ s.pro_schedule }}</p>{% endif %}
+  {% if 'qa' in features %}
+  <p><strong>Ask the Analyst</strong> — priority answers in the monthly Q&amp;A.</p>
+  {% if asked %}<p class="win">Got it — your question is with the analyst.</p>{% endif %}
+  <form method="post" action="/members/question" style="display:flex; gap:.5rem; flex-wrap:wrap">
+    <input name="question" required maxlength="2000" placeholder="Your question" style="flex:1; min-width:16rem">
+    <button type="submit">Send</button>
+  </form>
+  {% endif %}
 </div>
 {% endif %}
 
@@ -41,42 +133,7 @@
 </div>
 {% endif %}
 
-{% if 'selections' in features %}
-<h2>Latest selections</h2>
-<div class="card scroll">
-  {% if selections %}
-  <table>
-    <tr><th>Horse</th><th>Course</th><th>Time</th><th class="num">Published price</th><th>Status</th></tr>
-    {% for s in selections %}
-    <tr>
-      <td>{{ s['horse_name'] }}</td><td>{{ s['course'] }}</td>
-      <td class="mono">{{ s['race_time_local'] }}</td>
-      <td class="num mono">{{ s['validated_price_cents']|odds }}</td>
-      <td class="muted">{{ s['state'] }}</td>
-    </tr>
-    {% endfor %}
-  </table>
-  {% else %}<p class="muted">No selections yet today. No-bet days are part of the discipline.</p>{% endif %}
-</div>
-{% endif %}
-
-{% if 'full_log' in features %}
-<h2>The log — every result, in full</h2>
-<div class="card scroll">
-  {% if log_rows %}
-  <table>
-    <tr><th>Horse</th><th>Course</th><th>Time</th><th class="num">Price</th><th>Result</th><th class="num">P/L</th></tr>
-    {% for b in log_rows %}
-    <tr>
-      <td>{{ b['horse_name'] }}</td><td>{{ b['course'] }}</td>
-      <td class="mono">{{ b['race_time_local'] }}</td>
-      <td class="num mono">{{ (b['matched_price_cents'] or b['validated_price_cents'])|odds }}</td>
-      <td class="{{ 'win' if b['state'] == 'SETTLED_WON' else ('muted' if b['state'] == 'SETTLED_VOID' else 'loss') }}">{{ b['result'] or '—' }}</td>
-      <td class="num mono {{ 'win' if (b['net_pnl_cents'] or 0) >= 0 else 'loss' }}">{{ b['net_pnl_cents']|eur }}</td>
-    </tr>
-    {% endfor %}
-  </table>
-  {% else %}<p class="muted">The log fills as results settle. Losses get logged with the same energy as wins.</p>{% endif %}
-</div>
-{% endif %}
+<p class="muted" style="margin-top:2rem">Only ever bet inside a bank you can afford to lose entirely.
+Support: <a href="https://www.begambleaware.org">BeGambleAware.org</a> · 0808 8020 133 ·
+<a href="https://www.gamstop.co.uk">GAMSTOP</a></p>
 {% endblock %}

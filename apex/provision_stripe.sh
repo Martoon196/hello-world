@@ -6,7 +6,7 @@ set -euo pipefail
 : "${STRIPE_KEY:?set STRIPE_KEY=rk_live_...}"
 
 API="https://api.stripe.com/v1"
-SUCCESS_URL="https://apexcode.uk/"
+SUCCESS_URL="https://apexcode.uk/welcome.html"
 
 req() { curl -fsS -u "$STRIPE_KEY:" "$@"; }
 

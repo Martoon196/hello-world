@@ -62,7 +62,7 @@ say "3/7 Installing betbot's Python ingredients (takes a couple of minutes)"
 say "4/7 Creating the secrets file"
 [ -f "$ENV" ] || cp .env.example "$ENV"
 chmod 600 "$ENV"
-for k in FEED_TOKEN WHATSAPP_WEBHOOK_TOKEN BFBM_RESULTS_TOKEN; do
+for k in FEED_TOKEN WHATSAPP_WEBHOOK_TOKEN BFBM_RESULTS_TOKEN PADDOCK_SHARED_SECRET; do
   if ! grep -qE "^$k=.+" "$ENV"; then
     t=$(python3 -c 'import secrets;print(secrets.token_hex(32))')
     python3 - "$ENV" "$k" "$t" <<'PY'
