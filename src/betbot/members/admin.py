@@ -170,6 +170,20 @@ def build_admin_router(mrepo: MembersRepo, repo, notifier=None) -> APIRouter:
             store.delete_founder(founder_id)
         return back("Founder Wall updated.", "#founders")
 
+    @router.post("/admin/paddock/import")
+    async def paddock_import(emails_text: str = Form(...), send_welcome: str = Form("")):
+        """Bring earlier signups (e.g. from Notion) onto the list. They opted in on the site."""
+        found = sorted({e.strip().lower() for e in re.split(r"[\s,;]+", emails_text)
+                        if re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", e.strip())})
+        added = welcomed = 0
+        for email in found:
+            member_id, is_new = mrepo.join_paddock(email, "import")
+            added += int(is_new)
+            if is_new and send_welcome == "on":
+                welcomed += int(await asyncio.to_thread(emails.send_paddock_welcome, mrepo, member_id))
+        return back(f"Imported {added} new of {len(found)} addresses; welcome + guide sent to {welcomed}.",
+                    "#email")
+
     # ---- email tools ----
 
     @router.post("/admin/email/test")

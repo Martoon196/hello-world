@@ -215,3 +215,12 @@ def test_members_page_shows_official_log_in_pounds(repo, mrepo, store):
     assert "−£122.35" in page and "€" not in page          # official log, pounds
     assert "Manage billing" in page and "Ask the Analyst" in page
     assert "CONSUMED" not in page                            # no bot internals
+
+
+def test_paddock_import_skips_existing_and_junk(client, mrepo, outbox):
+    mrepo.join_paddock("old@x.com")
+    r = client.post("/admin/paddock/import", auth=AUTH, follow_redirects=False,
+                    data={"emails_text": "old@x.com, New@X.com\nnot-an-email\nthird@x.com",
+                          "send_welcome": "on"})
+    assert "Imported%202%20new%20of%203" in r.headers["location"]
+    assert {e["to"] for e in outbox} == {"new@x.com", "third@x.com"}

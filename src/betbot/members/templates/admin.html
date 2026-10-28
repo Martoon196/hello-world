@@ -96,6 +96,16 @@ selections are members-only; the public site shows a row once its date has passe
   <form method="post" action="/admin/email/weekly-now" class="inline" style="margin-left:1rem"><input name="confirm" placeholder="type SEND" style="width:7rem"><button class="quiet">Send to the whole list now</button></form>
 </div>
 
+<div class="card">
+  <p><strong>Import earlier Paddock signups</strong> (e.g. copied from the Notion database). Paste the
+  addresses, one per line or comma-separated. People already on the list are skipped.</p>
+  <form method="post" action="/admin/paddock/import">
+    <textarea name="emails_text" rows="5" style="width:100%; background:#1b1b1b; color:var(--bone); border:1px solid var(--line); border-radius:6px; padding:.5rem" required></textarea>
+    <label><input type="checkbox" name="send_welcome" checked> Send each new one the welcome email with the Bank Builder link</label>
+    <button type="submit">Import</button>
+  </form>
+</div>
+
 <h2 id="founders">Founder Wall</h2>
 <div class="card">
   <form method="post" action="/admin/founders/add" class="inline" style="flex-wrap:wrap">
